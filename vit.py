@@ -46,3 +46,4 @@ for epoch in range(1000):
             out=model(x.to(device))
             correct+=(torch.argmax(out, axis=1)==y.to(device)).sum().item()
     print("Accuracy on test set: ", correct/len(testset))
+torch.save(model.state_dict(), "./models/vit_sgd.pt")
