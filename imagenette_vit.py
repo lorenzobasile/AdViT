@@ -78,4 +78,5 @@ for epoch in range(n_epochs):
     with open("imagenette_vit.txt", 'a') as outfile:
         outfile.write("\nAccuracy on test set: "+str(correct/len(datasets['test'])))
     print("Accuracy on test set: ", correct/len(datasets['test']))
-torch.save(model.state_dict(), "./trained_models/vit_imagenette.pt")
+#torch.save(model.state_dict(), "./trained_models/vit_imagenette.pt")
+torch.save(model.head.state_dict(), "./trained_models/vit_imagenette_head.pt") #to save memory
