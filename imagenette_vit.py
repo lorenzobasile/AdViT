@@ -8,7 +8,9 @@ from torchvision import transforms
 from models import create_ViT
 from utils import train
 
-model = create_ViT(img_size=224, patch_size=16, num_classes=10)
+#model = create_ViT(img_size=224, patch_size=16, num_classes=10)
+
+model=timm.create_model('tv_resnet101', num_classes=10)
 
 data_transforms = {
     'train': transforms.Compose([
@@ -24,7 +26,7 @@ data_transforms = {
 }
 
 
-data_dir = './data/imagenette2-320/'
+data_dir = './data/imagewoof2-320/'
 datasets = {x: torchvision.datasets.ImageFolder(os.path.join(data_dir, x), data_transforms[x]) for x in ['train', 'test']}
 dataloaders = {'train': DataLoader(datasets['train'], batch_size=128, shuffle=True),'test': DataLoader(datasets['test'], batch_size=128, shuffle=False)}
 #dataset_sizes = {x: len(datasets[x]) for x in ['Training', 'Testing']}
@@ -43,10 +45,10 @@ n_epochs=5
 
 for p in model.named_parameters():
     p[1].requires_grad=False
-    if p[0]=='head.weight' or p[0]=='head.bias':
+    if p[0]=='fc.weight' or p[0]=='fc.bias':
         p[1].requires_grad=True
 
-train(model, dataloaders, n_epochs, optimizer, outfile_name="imagenette_vitb16.txt", clip=True)
+train(model, dataloaders, n_epochs, optimizer, outfile_name="imagewoof_vitb16.txt", clip=True)
 '''
 for epoch in range(n_epochs):
     with open("imagenette_vit.txt", 'a') as outfile:
@@ -83,4 +85,4 @@ for epoch in range(n_epochs):
     print("Accuracy on test set: ", correct/len(datasets['test']))
 #torch.save(model.state_dict(), "./trained_models/vit_imagenette.pt")
 '''
-torch.save(model.head.state_dict(), "./trained_models/vitb16_imagenette_head.pt") #to save memory
+torch.save(model.head.state_dict(), "./trained_models/vitb16_imagewoof_head.pt") #to save memory

@@ -43,4 +43,4 @@ for vit in vit_models:
         if p[0]=='head.weight' or p[0]=='head.bias':
             p[1].requires_grad=True
     train(model, dataloaders, n_epochs, optimizer, outfile_name=vit[4:-10]+".txt", clip=True)
-    torch.save(model.head.state_dict(), "./data/"+vit[4:-10]+".pt") #to save memory
+    torch.save(model.head.state_dict(), vit[4:-10]+".pt") #to save memory
