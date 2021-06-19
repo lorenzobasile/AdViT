@@ -3,7 +3,7 @@ import torch
 import torch.nn as nn
 
 def create_ViT(img_size=224, patch_size=16, num_classes=10):
-    model=timm.create_model('vit_base_patch16_224', pretrained=True, num_classes=num_classes, img_size=img_size)
+    model=timm.create_model('vit_base_patch16_224_in21k', pretrained=True, num_classes=num_classes, img_size=img_size)
     if patch_size!=16:
         for p in model.named_parameters():
             if p[0]=='patch_embed.proj.bias':

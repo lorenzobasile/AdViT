@@ -1,5 +1,6 @@
 from torch.optim.lr_scheduler import LambdaLR
 import math
+import torch
 
 # https://github.com/jeonsworld/ViT-pytorch
 class WarmupCosineSchedule(LambdaLR):
@@ -15,7 +16,9 @@ class WarmupCosineSchedule(LambdaLR):
         progress = float(step - self.warmup_steps) / float(max(1, self.t_total - self.warmup_steps))
         return max(0.0, 0.5 * (1. + math.cos(math.pi * float(self.cycles) * 2.0 * progress)))
 
-def train(model, dataloaders, n_epochs, optimizer, scheduler=None, outfile_name=None, clip=False)
+def train(model, dataloaders, n_epochs, optimizer, scheduler=None, outfile_name=None, clip=False):
+    loss=torch.nn.CrossEntropyLoss()
+    device=torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
     if outfile_name is not None:
         with open(outfile_name, 'w') as outfile:
             outfile.write("")
@@ -47,5 +50,5 @@ def train(model, dataloaders, n_epochs, optimizer, scheduler=None, outfile_name=
                     correct+=(torch.argmax(out, axis=1)==y.to(device)).sum().item()
             if outfile_name is not None:
                 with open(outfile_name, 'a') as outfile:
-                     outfile.write("\nAccuracy on "+i+" set: "+str(correct/len(datasets[i])))
-            print("Accuracy on "+i+" set: ", correct/len(datasets[i]))
+                     outfile.write("\nAccuracy on "+i+" set: "+str(correct/len(dataloaders[i].dataset)))
+            print("Accuracy on "+i+" set: ", correct/len(dataloaders[i].dataset))
