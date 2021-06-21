@@ -8,7 +8,7 @@ from torchvision import transforms
 from models import create_ViT
 from utils import train
 
-vit_models = ['vit_base_patch16_224_in21k', 'vit_large_patch16_224_in21k', 'vit_base_patch32_224_in21k',  'vit_large_patch32_224_in21k']
+cnn_names = ['resnet18', 'tv_resnet34','tv_resnet50', 'tv_resnet101', 'wide_resnet50_2', 'wide_resnet101_2', 'vgg16']
 
 data_transforms = {
     'train': transforms.Compose([
@@ -33,14 +33,14 @@ device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
 
 n_epochs=5
-for vit in vit_models:
-    print(vit)
-    model=timm.create_model(vit, pretrained=True, num_classes=10)
+for cnn in cnn_names:
+    print(cnn)
+    model=timm.create_model(cnn, pretrained=True, num_classes=10)
     model=model.to(device)
     optimizer = torch.optim.SGD(model.parameters(), lr=3e-2, momentum=0.9)
     for p in model.named_parameters():
         p[1].requires_grad=False
-        if p[0]=='head.weight' or p[0]=='head.bias':
+        if p[0]=='fc.weight' or p[0]=='head.fc.weight' or p[0]=='fc.bias' or p[0]=='head.fc.bias':
             p[1].requires_grad=True
-    train(model, dataloaders, n_epochs, optimizer, outfile_name=vit[4:-10]+".txt", clip=True)
-    torch.save(model.head.state_dict(), vit[4:-10]+".pt") #to save memory
+    train(model, dataloaders, n_epochs, optimizer, outfile_name=cnn + ".txt", clip=True)
+    torch.save(model.head.state_dict(), cnn + ".pt") #to save memory
