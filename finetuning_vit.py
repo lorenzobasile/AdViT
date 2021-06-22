@@ -8,7 +8,7 @@ from torchvision import transforms
 from models import create_ViT
 from utils import train
 
-vit_models = ['vit_base_patch32_224',  'vit_small_patch32_224']
+vit_models = ['vit_base_patch16_224', 'vit_base_patch32_224', 'vit_small_patch16_224',  'vit_small_patch32_224']
 
 data_transforms = {
     'train': transforms.Compose([
