@@ -135,6 +135,5 @@ data/
 # PyCharm
 .idea/
 
-# Stdout/Stderr folders
-stdout/
-stderr/
+
+*.sh*
