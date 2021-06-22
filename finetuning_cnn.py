@@ -42,5 +42,9 @@ for cnn in cnn_names:
         p[1].requires_grad=False
         if p[0]=='fc.weight' or p[0]=='head.fc.weight' or p[0]=='fc.bias' or p[0]=='head.fc.bias':
             p[1].requires_grad=True
-    train(model, dataloaders, n_epochs, optimizer, outfile_name=cnn + ".txt", clip=True)
-    torch.save(model.head.state_dict(), cnn + ".pt") #to save memory
+            if p[0] == 'fc.weight':
+                final_layer = model.fc
+            if p[0] == 'head.fc.weight':
+	            final_layer = model.head.fc
+    train(model, dataloaders, n_epochs, optimizer, outfile_name="training_outputs/"+ cnn + ".txt", clip=True)
+    torch.save(final_layer.state_dict(), "trained_models/" + cnn + ".pt") #to save memory

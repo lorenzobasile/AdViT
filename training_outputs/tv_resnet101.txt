@@ -1,0 +1,2 @@
+
+Accuracy on train set: 0.9960925124089133
