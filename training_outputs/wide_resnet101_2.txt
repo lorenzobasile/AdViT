@@ -1,16 +1,16 @@
 
 Epoch: 0/5
-Accuracy on train set: 0.9931354947724153
-Accuracy on test set: 0.9910828025477707
+Accuracy on train set: 0.9957756890907171
+Accuracy on test set: 0.9959235668789809
 Epoch: 1/5
-Accuracy on train set: 0.997148590136234
-Accuracy on test set: 0.9938853503184714
+Accuracy on train set: 0.9961981201816453
+Accuracy on test set: 0.9951592356687898
 Epoch: 2/5
-Accuracy on train set: 0.9990495300454113
-Accuracy on test set: 0.9949044585987261
+Accuracy on train set: 0.9992607455908755
+Accuracy on test set: 0.9961783439490446
 Epoch: 3/5
-Accuracy on train set: 0.9990495300454113
-Accuracy on test set: 0.9938853503184714
+Accuracy on train set: 0.9974654134544303
+Accuracy on test set: 0.9926114649681529
 Epoch: 4/5
 Accuracy on train set: 0.9995775689090717
-Accuracy on test set: 0.9956687898089172
+Accuracy on test set: 0.9961783439490446

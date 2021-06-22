@@ -26,10 +26,10 @@ dataloaders = {'train': DataLoader(datasets['train'], batch_size=128, shuffle=Tr
 
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
-model=timm.create_model('vit_base_patch16_224_in21k', pretrained=True, num_classes=10)
+model=timm.create_model('resnet18', pretrained=True, num_classes=10)
 
 model=model.to(device)
-model.head.load_state_dict(torch.load("./trained_models/base_patch16.pt"))
+model.fc.load_state_dict(torch.load("./trained_models/resnet18.pt"))
 model.eval()
 adversary=FGSM(model, 'cuda')
 correct=0

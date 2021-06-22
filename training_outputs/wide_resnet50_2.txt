@@ -1,0 +1,16 @@
+
+Epoch: 0/5
+Accuracy on train set: 0.9954588657725209
+Accuracy on test set: 0.9938853503184714
+Epoch: 1/5
+Accuracy on train set: 0.997042982363502
+Accuracy on test set: 0.9943949044585987
+Epoch: 2/5
+Accuracy on train set: 0.9980990600908227
+Accuracy on test set: 0.9943949044585987
+Epoch: 3/5
+Accuracy on train set: 0.9989439222726793
+Accuracy on test set: 0.9946496815286624
+Epoch: 4/5
+Accuracy on train set: 0.9990495300454113
+Accuracy on test set: 0.9951592356687898
