@@ -8,7 +8,7 @@ from torchvision import transforms
 from models import create_ViT
 from utils import train
 
-vit_models = ['vit_base_patch32_224',  'vit_small_patch32_224']
+models = ['mixer_b16_224_in21k', 'mixer_l16_224_in21k']
 
 data_transforms = {
     'train': transforms.Compose([
@@ -33,14 +33,14 @@ device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
 
 n_epochs=5
-for vit in vit_models:
-    print(vit)
-    model=timm.create_model(vit, pretrained=True, num_classes=10)
+for mod in models:
+    print(mod)
+    model=timm.create_model(mod, pretrained=True, num_classes=10)
     model=model.to(device)
     optimizer = torch.optim.SGD(model.parameters(), lr=3e-2, momentum=0.9)
     for p in model.named_parameters():
         p[1].requires_grad=False
         if p[0]=='head.weight' or p[0]=='head.bias':
             p[1].requires_grad=True
-    train(model, dataloaders, n_epochs, optimizer, outfile_name="./training_outputs/in1k"+vit[4:-4]+".txt", clip=True)
-    torch.save(model.head.state_dict(), "./trained_models/in1k"+vit[4:-4]+".pt") #to save memory
+    train(model, dataloaders, n_epochs, optimizer, outfile_name="./training_outputs/"+mod[:-10]+".txt", clip=True)
+    torch.save(model.head.state_dict(), "./trained_models/"+mod[:-10]+".pt") #to save memory
