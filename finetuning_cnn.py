@@ -8,23 +8,23 @@ from torchvision import transforms
 from models import create_ViT
 from utils import train
 
-cnn_names = ['resnet18', 'tv_resnet34','tv_resnet50', 'tv_resnet101', 'wide_resnet50_2', 'wide_resnet101_2', 'vgg16']
+cnn_names = ['resnet18', 'tv_resnet50', 'tv_resnet101', 'vgg16']
 
 data_transforms = {
     'train': transforms.Compose([
         transforms.Resize((224,224)),
         transforms.ToTensor(),
-        transforms.Normalize([0.5, 0.5, 0.5], [0.5, 0.5, 0.5])
+        #transforms.Normalize([0.5, 0.5, 0.5], [0.5, 0.5, 0.5])
     ]),
     'test': transforms.Compose([
         transforms.Resize((224,224)),
         transforms.ToTensor(),
-        transforms.Normalize([0.5, 0.5, 0.5], [0.5, 0.5, 0.5])
+        #transforms.Normalize([0.5, 0.5, 0.5], [0.5, 0.5, 0.5])
     ]),
 }
 
 
-data_dir = './data/imagenette2-320/'
+data_dir = './data/imagewoof2-320/'
 datasets = {x: torchvision.datasets.ImageFolder(os.path.join(data_dir, x), data_transforms[x]) for x in ['train', 'test']}
 dataloaders = {'train': DataLoader(datasets['train'], batch_size=128, shuffle=True),'test': DataLoader(datasets['test'], batch_size=128, shuffle=False)}
 
@@ -46,5 +46,5 @@ for cnn in cnn_names:
                 final_layer = model.fc
             if p[0] == 'head.fc.weight':
 	            final_layer = model.head.fc
-    train(model, dataloaders, n_epochs, optimizer, outfile_name="training_outputs/"+ cnn + ".txt", clip=True)
-    torch.save(final_layer.state_dict(), "trained_models/" + cnn + ".pt") #to save memory
+    train(model, dataloaders, n_epochs, optimizer, outfile_name="training_outputs/woof"+ cnn + ".txt", clip=True)
+    torch.save(final_layer.state_dict(), "trained_models/woof" + cnn + ".pt") #to save memory

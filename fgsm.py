@@ -1,12 +1,12 @@
 import timm
 import torch
 from torch.utils.data import DataLoader
-from deeprobust.image.attack.fgsm import FGSM
+from grad_attack import GradAttack
 from torchvision import transforms
 import torchvision
 import os
 
-outfile_name="./attack_results/fgsm.txt"
+outfile_name="./attack_results/test.txt"
 
 data_transforms = {
     'train': transforms.Compose([
@@ -27,8 +27,8 @@ datasets = {x: torchvision.datasets.ImageFolder(os.path.join(data_dir, x), data_
 dataloaders = {'train': DataLoader(datasets['train'], batch_size=128, shuffle=True),'test': DataLoader(datasets['test'], batch_size=64, shuffle=False)}
 
 model_names=['resnet18', 'tv_resnet50', 'tv_resnet101', 'vgg16', 'vit_base_patch16_224',  'vit_base_patch32_224',  'vit_small_patch16_224','vit_small_patch32_224']
-epsilons=[0.001, 0.005, 0.01, 0.05, 0.1]
-
+#epsilons=[0.001, 0.005, 0.01, 0.05, 0.1]
+epsilons=[10]
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
 models=[timm.create_model(model_name, pretrained=True, num_classes=10).to(device) for model_name in model_names]
@@ -55,7 +55,7 @@ with open(outfile_name, 'w') as outfile:
     outfile.write("Clean accuracy: "+str(correct/len(dataloaders['test'].dataset)))
 print("Clean accuracy: ", correct/len(dataloaders['test'].dataset))
 
-adversaries=[FGSM(model, 'cuda') for model in models]
+adversaries=[GradAttack(model, 'cuda') for model in models]
 for eps in epsilons:
     for i, attacked_model in enumerate(models):
         correct=torch.zeros(len(models))
