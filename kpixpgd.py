@@ -15,7 +15,7 @@ class kPixelPGD(BaseAttack):
 
     def __init__(self, model, device = 'cuda'):
 
-        super(PGD, self).__init__(model, device)
+        super(kPixelPGD, self).__init__(model, device)
 
     def generate(self, image, label, **kwargs):
         """
@@ -146,11 +146,18 @@ def kpixelpgd_attack(model,
     attack_norm = torch.norm(X_pgd-X, dim=1)
     B,C,H,W = X.shape
     reshaped_norm=attack_norm.reshape(B, -1)
-    topk = torch.topk(reshaped_norm, k=k, dim=1)
+    topk = torch.topk(reshaped_norm, k=H*W-k, dim=1, largest=False)
+    topkindices=topk.indices[:,:H*W-k]
+    for i in range(B):
+        reshaped_norm[i][topkindices[i]]=0
+    
     kth = torch.min(topk.values, dim=1).values.reshape(B, 1)
-    mask = torch.ge(reshaped_norm, kth).reshape(B, H, W)
-    mask = torch.swapaxes(torch.stack([mask for _ in range(C)]), 0, 1)
-    perturbation = torch.multiply(batch, mask)
+    mask=torch.gt(reshaped_norm, 0).reshape(B,H,W)
+    #mask = torch.ge(reshaped_norm, kth).reshape(B, H, W)
+    print(mask.sum()/B)
+    mask = torch.transpose(torch.stack([mask for _ in range(C)]), 0, 1)
+    perturbation = torch.mul(X_pgd-X, mask)
+    #print(mask)
     X_pgd = X + perturbation
 
 

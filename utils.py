@@ -52,3 +52,17 @@ def train(model, dataloaders, n_epochs, optimizer, scheduler=None, outfile_name=
                 with open(outfile_name, 'a') as outfile:
                      outfile.write("\nAccuracy on "+i+" set: "+str(correct/len(dataloaders[i].dataset)))
             print("Accuracy on "+i+" set: ", correct/len(dataloaders[i].dataset))
+
+def kpixattack(X, X_pgd, k=3000):
+    attack_norm=torch.norm(X_pgd-X, dim=1)
+    B,C,H,W=X.shape
+    reshaped_norm=attack_norm.reshape(B,-1)
+    topk=torch.topk(reshaped_norm, k=H*W-k, dim=1, largest=False)
+    topkindices=topk.indices[:,:H*W-k]
+    for i in range(B):
+        reshaped_norm[i][topkindices[i]]=0
+    mask=torch.gt(reshaped_norm, 0).reshape(B,H,W)
+    mask=torch.transpose(torch.stack([mask for _ in range(C)]), 0, 1)
+    perturbation=torch.mul(X_pgd-X, mask)
+    return X+perturbation
+
