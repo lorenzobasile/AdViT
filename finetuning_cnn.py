@@ -24,7 +24,7 @@ data_transforms = {
 }
 
 
-data_dir = './data/imagewoof2-320/'
+data_dir = './data/imagenette2-320/'
 datasets = {x: torchvision.datasets.ImageFolder(os.path.join(data_dir, x), data_transforms[x]) for x in ['train', 'test']}
 dataloaders = {'train': DataLoader(datasets['train'], batch_size=128, shuffle=True),'test': DataLoader(datasets['test'], batch_size=128, shuffle=False)}
 
@@ -46,5 +46,5 @@ for cnn in cnn_names:
                 final_layer = model.fc
             if p[0] == 'head.fc.weight':
 	            final_layer = model.head.fc
-    train(model, dataloaders, n_epochs, optimizer, outfile_name="training_outputs/woof"+ cnn + ".txt", clip=True)
-    torch.save(final_layer.state_dict(), "trained_models/woof" + cnn + ".pt") #to save memory
+    train(model, dataloaders, n_epochs, optimizer, outfile_name="training_outputs/"+ cnn + ".txt", clip=True)
+    torch.save(final_layer.state_dict(), "trained_models/" + cnn + ".pt") #to save memory

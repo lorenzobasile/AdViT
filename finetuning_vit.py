@@ -24,7 +24,7 @@ data_transforms = {
 }
 
 
-data_dir = './data/imagewoof2-320/'
+data_dir = './data/imagenette2-320/'
 datasets = {x: torchvision.datasets.ImageFolder(os.path.join(data_dir, x), data_transforms[x]) for x in ['train', 'test']}
 dataloaders = {'train': DataLoader(datasets['train'], batch_size=128, shuffle=True),'test': DataLoader(datasets['test'], batch_size=128, shuffle=False)}
 
@@ -42,6 +42,6 @@ for vit in vit_models:
         p[1].requires_grad=False
         if p[0]=='head.weight' or p[0]=='head.bias':
             p[1].requires_grad=True
-    train(model, dataloaders, n_epochs, optimizer, outfile_name="./training_outputs/woof"+vit[4:-4]+".txt", clip=True)
+    train(model, dataloaders, n_epochs, optimizer, outfile_name="./training_outputs/in1k"+vit[4:-4]+".txt", clip=True)
     #train(model, dataloaders, n_epochs, optimizer, clip=True)
-    torch.save(model.head.state_dict(), "./trained_models/woof"+vit[4:-4]+".pt") #to save memory
+    torch.save(model.head.state_dict(), "./trained_models/in1k"+vit[4:-4]+".pt") #to save memory

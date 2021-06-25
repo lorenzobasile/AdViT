@@ -12,12 +12,12 @@ data_transforms = {
     'train': transforms.Compose([
         transforms.Resize((224,224)),
         transforms.ToTensor(),
-        transforms.Normalize([0.5, 0.5, 0.5], [0.5, 0.5, 0.5])
+        #transforms.Normalize([0.5, 0.5, 0.5], [0.5, 0.5, 0.5])
     ]),
     'test': transforms.Compose([
         transforms.Resize((224,224)),
         transforms.ToTensor(),
-        transforms.Normalize([0.5, 0.5, 0.5], [0.5, 0.5, 0.5])
+        #transforms.Normalize([0.5, 0.5, 0.5], [0.5, 0.5, 0.5])
     ]),
 }
 
@@ -48,13 +48,14 @@ correct=torch.zeros(len(models))
 for x, y in dataloaders['test']:
         x=x.to(device)
         y=y.to(device)
+        print(torch.max(x), torch.min(x))
         for k, model in enumerate(models):
             temp=torch.argmax(model(x), axis=1)==y
             correct[k]+=temp.sum().item()
 with open(outfile_name, 'w') as outfile:
     outfile.write("Clean accuracy: "+str(correct/len(dataloaders['test'].dataset)))
 print("Clean accuracy: ", correct/len(dataloaders['test'].dataset))
-
+'''
 adversaries=[GradAttack(model, 'cuda') for model in models]
 for eps in epsilons:
     for i, attacked_model in enumerate(models):
@@ -69,3 +70,4 @@ for eps in epsilons:
         with open(outfile_name, 'a') as outfile:
              outfile.write("\nAttack on "+model_names[i]+": "+str(correct/len(dataloaders['test'].dataset)))
         print("Attack on "+model_names[i]+": ", correct/len(dataloaders['test'].dataset))
+'''
