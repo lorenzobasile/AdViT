@@ -66,3 +66,9 @@ def kpixattack(X, X_pgd, k=3000):
     perturbation=torch.mul(X_pgd-X, mask)
     return X+perturbation
 
+def mean_distance(perturbation, p=2):
+    B,C,H,W=perturbation.shape
+    norm=torch.norm(perturbation, dim=1)
+    nz=torch.stack([norm[i].nonzero() for i in range(B)])
+    distances=torch.cdist(nz.float(), nz.float(), p=2).reshape(B,-1)
+    return distances[distances>0].mean()
