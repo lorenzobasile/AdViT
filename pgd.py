@@ -42,7 +42,7 @@ for i, model_name in enumerate(model_names):
     elif 'vgg' in model_name:
         models[i].head.fc.load_state_dict(torch.load("./trained_models/vgg16.pt"))
     else:
-        models[i].fc.load_state_dict(torch.load("./trained_models/"+model_name+".pt"))
+        models[i].load_state_dict(torch.load("./trained_models/"+model_name+".pt"))
     models[i].eval()
 
 correct=0
@@ -67,12 +67,13 @@ for eps in epsilons:
         for j, (x, y) in enumerate(dataloaders['test']):
             x=x.to(device)
             y=y.to(device)
-            perturbed_x=adversaries[i].generate(x, y, epsilon=eps, step_size=eps/5)
-            kpix_perturbed_x=kpixattack(x, perturbed_x, k=3000)
+            perturbed_x=adversaries[i].generate(x, y, epsilon=eps, step_size=eps/3, num_steps=10)
             for k, model in enumerate(models):
                 temp=torch.argmax(model(perturbed_x), axis=1)==y
                 correct[k]+=temp.sum().item()
-                temp=torch.argmax(model(kpix_perturbed_x), axis=1)==y
+            perturbed_x=kpixattack(x, perturbed_x, k=3000)
+            for k, model in enumerate(models):
+                temp=torch.argmax(model(perturbed_x), axis=1)==y
                 correct_k[k]+=temp.sum().item()
         with open(outfile_name, 'a') as outfile:
              outfile.write("\nAttack on "+model_names[i]+": "+str(correct/len(dataloaders['test'].dataset)))

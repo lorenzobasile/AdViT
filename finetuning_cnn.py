@@ -9,7 +9,7 @@ from models import create_ViT
 from utils import train
 
 cnn_names = ['resnet18', 'tv_resnet50', 'tv_resnet101', 'vgg16']
-
+#cnn_names=['resnet18']
 data_transforms = {
     'train': transforms.Compose([
         transforms.Resize((224,224)),
@@ -46,5 +46,8 @@ for cnn in cnn_names:
                 final_layer = model.fc
             if p[0] == 'head.fc.weight':
 	            final_layer = model.head.fc
-    train(model, dataloaders, n_epochs, optimizer, outfile_name="training_outputs/"+ cnn + ".txt", clip=True)
-    torch.save(final_layer.state_dict(), "trained_models/" + cnn + ".pt") #to save memory
+    train(model, dataloaders, n_epochs, optimizer, outfile_name="training_outputs/"+cnn+".txt", clip=True)
+    if cnn=='vgg16':
+        torch.save(model.head.fc.state_dict(), "trained_models/" + cnn + ".pt") #to save memory
+    else:
+        torch.save(model.state_dict(), "trained_models/" + cnn + ".pt")

@@ -27,6 +27,7 @@ datasets = {x: torchvision.datasets.ImageFolder(os.path.join(data_dir, x), data_
 dataloaders = {'train': DataLoader(datasets['train'], batch_size=128, shuffle=True),'test': DataLoader(datasets['test'], batch_size=64, shuffle=False)}
 
 model_names=['resnet18', 'tv_resnet50', 'tv_resnet101', 'vgg16', 'vit_base_patch16_224',  'vit_base_patch32_224',  'vit_small_patch16_224','vit_small_patch32_224']
+#model_names=['resnet18']
 epsilons=[0.001, 0.005, 0.01, 0.05, 0.1]
 #epsilons=[10]
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
@@ -40,15 +41,13 @@ for i, model_name in enumerate(model_names):
     elif 'vgg' in model_name:
         models[i].head.fc.load_state_dict(torch.load("./trained_models/vgg16.pt"))
     else:
-        models[i].fc.load_state_dict(torch.load("./trained_models/"+model_name+".pt"))
+        models[i].load_state_dict(torch.load("./trained_models/"+model_name+".pt"))
     models[i].eval()
-correct=0
 
 correct=torch.zeros(len(models))
 for x, y in dataloaders['test']:
         x=x.to(device)
         y=y.to(device)
-        print(torch.max(x), torch.min(x))
         for k, model in enumerate(models):
             temp=torch.argmax(model(x), axis=1)==y
             correct[k]+=temp.sum().item()
