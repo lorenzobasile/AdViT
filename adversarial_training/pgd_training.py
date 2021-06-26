@@ -21,9 +21,9 @@ data_dir = '../data/imagenette2-320/'
 datasets = {x: torchvision.datasets.ImageFolder(os.path.join(data_dir, x), data_transforms[x]) for x in
             ['train', 'test']}
 dataloaders = {'train': DataLoader(datasets['train'], batch_size=128, shuffle=True),
-               'test': DataLoader(datasets['test'], batch_size=64, shuffle=False)}
+               'test': DataLoader(datasets['test'], batch_size=32, shuffle=False)}
 
-model_names = ['vit_base_patch16_224','tv_resnet50', 'vgg16']
+model_names = ['vgg16','vit_base_patch16_224','tv_resnet50']
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 epsilons = [0.001, 0.005, 0.01, 0.05, 0.1]
 
@@ -40,7 +40,7 @@ for model_name in model_names:
             model.fc.load_state_dict(torch.load(f"../trained_models/{model_name}.pt"))
         model.eval()
 
-        name_model = model_name[-4:4] if 'vit' in model_name else model_name
+        name_model = 'vit_'+model_name[4:-4] if 'vit' in model_name else model_name
         print(f"PGD Training for {name_model}, eps={eps:.3f}")
 
         defense = PGDtraining(model, device)

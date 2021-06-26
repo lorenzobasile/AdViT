@@ -41,7 +41,7 @@ for i, model_name in enumerate(model_names):
             model.fc.load_state_dict(torch.load(f"../trained_models/{model_name}.pt"))
         model.eval()
 
-        name_model = model_name[-4:4] if 'vit' in model_name else model_name
+        name_model = 'vit_'+model_name[4:-4] if 'vit' in model_name else model_name
         print(f"FGSM Training for {name_model}, eps={eps:.3f}")
 
         defense = FGSMtraining(model, device)
