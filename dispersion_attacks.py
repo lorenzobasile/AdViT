@@ -32,7 +32,7 @@ epsilons=[0.1]
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
 models=[timm.create_model(model_name, pretrained=True, num_classes=10).to(device) for model_name in model_names]
-
+kappa=range(100,2100,100)
 
 for i, model_name in enumerate(model_names):
     if 'vit' in model_name:
@@ -60,21 +60,16 @@ for eps in epsilons:
     with open(outfile_name, 'a') as outfile:
         outfile.write("\nEpsilon: "+str(eps))
     for i, attacked_model in enumerate(models):
-        mean=0
+        mean=torch.zeros(len(kappa))
         correct=torch.zeros(len(models))
         correct_k=torch.zeros(len(models))
         for j, (x, y) in enumerate(dataloaders['test']):
             x=x.to(device)
             y=y.to(device)
             perturbed_x=adversaries[i].generate(x, y, epsilon=eps, step_size=eps/3, num_steps=10)
-            for k, model in enumerate(models):
-                temp=torch.argmax(model(perturbed_x), axis=1)==y
-                correct[k]+=temp.sum().item()
-            perturbed_x=kpixattack(x, perturbed_x, k=500)
-            for k, model in enumerate(models):
-                temp=torch.argmax(model(perturbed_x), axis=1)==y
-                correct_k[k]+=temp.sum().item()
-            mean+=mean_distance(perturbed_x-x)
+            for idx, k in enumerate(kappa):
+                perturbed_k=kpixattack(x, perturbed_x, k=k)
+                mean[idx]+=mean_distance(perturbed_k-x)
         print('model: ', model_names[i], " mean: ", mean/len(dataloaders['train']))
         with open(outfile_name, 'a') as outfile:
              outfile.write("\nAttack on "+model_names[i]+": "+str(correct/len(dataloaders['test'].dataset)))
