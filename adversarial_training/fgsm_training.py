@@ -23,26 +23,28 @@ datasets = {x: torchvision.datasets.ImageFolder(os.path.join(data_dir, x), data_
 dataloaders = {'train': DataLoader(datasets['train'], batch_size=128, shuffle=True),
                'test': DataLoader(datasets['test'], batch_size=64, shuffle=False)}
 
-model_names = ['tv_resnet50', 'vgg16', 'vit_base_patch16_224']
+model_names = ['vit_base_patch16_224','tv_resnet50', 'vgg16']
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
-models = [timm.create_model(model_name, pretrained=True, num_classes=10).to(device) for model_name in model_names]
-
 epsilons=[0.001, 0.005, 0.01, 0.05, 0.1]
 
-for i, model_name in enumerate(model_names):
-    if 'vit' in model_name:
-        models[i].head.load_state_dict(torch.load(f"../trained_models/{model_name[4:-4]}.pt"))
-    elif 'vgg' in model_name:
-        models[i].head.fc.load_state_dict(torch.load("../trained_models/vgg16.pt"))
-    else:
-        models[i].fc.load_state_dict(torch.load(f"../trained_models/{model_name}.pt"))
-    models[i].eval()
 
-for i, model in enumerate(model_names):
+for i, model_name in enumerate(model_names):
     for eps in epsilons:
-        name_model = model[-4:4] if 'vit' in model else model
+
+        model = timm.create_model(model_name, pretrained=True, num_classes=10).to(device)
+
+        if 'vit' in model_name:
+            model.head.load_state_dict(torch.load(f"../trained_models/{model_name[4:-4]}.pt"))
+        elif 'vgg' in model_name:
+            model.head.fc.load_state_dict(torch.load("../trained_models/vgg16.pt"))
+        else:
+            model.fc.load_state_dict(torch.load(f"../trained_models/{model_name}.pt"))
+        model.eval()
+
+        name_model = model_name[-4:4] if 'vit' in model_name else model_name
         print(f"FGSM Training for {name_model}, eps={eps:.3f}")
-        defense = FGSMtraining(models[i], device)
+
+        defense = FGSMtraining(model, device)
         defense.generate(train_loader=dataloaders['train'],
                          test_loader=dataloaders['test'],
                          save_dir=f"../adversarial_training_results",
