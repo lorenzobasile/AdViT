@@ -2,13 +2,13 @@ import timm
 import torch
 from torch.utils.data import DataLoader
 from deeprobust.image.attack.pgd import PGD
-from utils import kpixattack
-from datautils.data import getdataloaders
+from utils import kpixattack, mean_distance
+from datautils.data import get_dataloaders
 from torchvision import transforms
 import torchvision
 import os
 
-outfile_name="./attack_results/pgd.txt"
+outfile_name="./attack_results/test.txt"
 
 data_transforms = {
     'train': transforms.Compose([
@@ -25,7 +25,8 @@ dataloaders = get_dataloaders(data_dir='./data/imagenette2-320/',
                               test_batch_size=64,
                               data_transforms=data_transforms)
 
-model_names=['resnet18', 'tv_resnet50', 'tv_resnet101', 'vgg16', 'vit_base_patch16_224',  'vit_base_patch32_224',  'vit_small_patch16_224','vit_small_patch32_224']
+#model_names=['resnet18', 'tv_resnet50', 'tv_resnet101', 'vgg16', 'vit_base_patch16_224',  'vit_base_patch32_224',  'vit_small_patch16_224','vit_small_patch32_224']
+model_names=['vit_base_patch16_224', 'resnet18']
 epsilons=[0.1]
 
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
@@ -59,6 +60,7 @@ for eps in epsilons:
     with open(outfile_name, 'a') as outfile:
         outfile.write("\nEpsilon: "+str(eps))
     for i, attacked_model in enumerate(models):
+        mean=0
         correct=torch.zeros(len(models))
         correct_k=torch.zeros(len(models))
         for j, (x, y) in enumerate(dataloaders['test']):
@@ -68,11 +70,12 @@ for eps in epsilons:
             for k, model in enumerate(models):
                 temp=torch.argmax(model(perturbed_x), axis=1)==y
                 correct[k]+=temp.sum().item()
-            perturbed_x=kpixattack(x, perturbed_x, k=3000)
+            perturbed_x=kpixattack(x, perturbed_x, k=500)
             for k, model in enumerate(models):
                 temp=torch.argmax(model(perturbed_x), axis=1)==y
                 correct_k[k]+=temp.sum().item()
-            print(mean_distance(perturbed_x-x))
+            mean+=mean_distance(perturbed_x-x)
+        print('model: ', model_names[i], " mean: ", mean/len(dataloaders['train']))
         with open(outfile_name, 'a') as outfile:
              outfile.write("\nAttack on "+model_names[i]+": "+str(correct/len(dataloaders['test'].dataset)))
              outfile.write("\nk-Attack on "+model_names[i]+": "+str(correct_k/len(dataloaders['test'].dataset)))
