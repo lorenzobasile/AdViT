@@ -135,5 +135,9 @@ data/
 # PyCharm
 .idea/
 
-
+# Bash scripts
 *.sh*
+
+# Std out and err folders
+stdout/
+stderr/
