@@ -2,30 +2,30 @@ import timm
 import torch
 from torch.utils.data import DataLoader
 from deeprobust.image.attack.pgd import PGD
-from utils import kpixattack
 from torchvision import transforms
 import torchvision
 import os
+from utils.attack import kpixel_attack
+from utils.data import get_dataloaders
 
 outfile_name="./attack_results/pgd.txt"
 
 data_transforms = {
     'train': transforms.Compose([
         transforms.Resize((224,224)),
-        transforms.ToTensor(),
-        #transforms.Normalize([0.5, 0.5, 0.5], [0.5, 0.5, 0.5])
+        transforms.ToTensor()
     ]),
     'test': transforms.Compose([
         transforms.Resize((224,224)),
-        transforms.ToTensor(),
-        #transforms.Normalize([0.5, 0.5, 0.5], [0.5, 0.5, 0.5])
+        transforms.ToTensor()
     ]),
 }
 
 
-data_dir = './data/imagenette2-320/'
-datasets = {x: torchvision.datasets.ImageFolder(os.path.join(data_dir, x), data_transforms[x]) for x in ['train', 'test']}
-dataloaders = {'train': DataLoader(datasets['train'], batch_size=128, shuffle=True),'test': DataLoader(datasets['test'], batch_size=64, shuffle=False)}
+dataloaders = get_dataloaders(data_dir='./data/imagenette2-320/',
+                              train_batch_size=128,
+                              test_batch_size=64,
+                              data_transforms=data_transforms)
 
 model_names=['resnet18', 'tv_resnet50', 'tv_resnet101', 'vgg16', 'vit_base_patch16_224',  'vit_base_patch32_224',  'vit_small_patch16_224','vit_small_patch32_224']
 epsilons=[0.001, 0.005, 0.01, 0.05, 0.1]
@@ -71,7 +71,7 @@ for eps in epsilons:
             for k, model in enumerate(models):
                 temp=torch.argmax(model(perturbed_x), axis=1)==y
                 correct[k]+=temp.sum().item()
-            perturbed_x=kpixattack(x, perturbed_x, k=3000)
+            perturbed_x=kpixel_attack(x, perturbed_x, k=3000)
             for k, model in enumerate(models):
                 temp=torch.argmax(model(perturbed_x), axis=1)==y
                 correct_k[k]+=temp.sum().item()

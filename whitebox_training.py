@@ -2,7 +2,7 @@ import argparse
 from deeprobust.image.defense.fgsmtraining import FGSMtraining
 from deeprobust.image.defense.pgdtraining import PGDtraining
 from torchvision import transforms
-from datautils.data import get_dataloaders
+from utils.data import get_dataloaders
 import torch
 import timm
 
@@ -33,15 +33,15 @@ dataloaders = get_dataloaders(data_dir=args.data_dir,
                               test_batch_size=args.test_batch_size,
                               data_transforms=data_transforms)
 
-
 model_names = ['tv_resnet50', 'vgg16']
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+models=[timm.create_model(model_name, pretrained=True, num_classes=10).to(device) for model_name in model_names]
 epsilons=[0.001, 0.005, 0.01, 0.05, 0.1]
 
 for i, model_name in enumerate(model_names):
     for eps in epsilons:
 
-        model = timm.create_model(model_name, pretrained=True, num_classes=10).to(device)
+        model = models[i].to(device)
 
         if 'vit' in model_name:
             model.head.load_state_dict(torch.load(f"trained_models/{model_name[4:-4]}.pt"))

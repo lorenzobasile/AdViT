@@ -4,9 +4,10 @@ import torch.nn as nn
 import numpy as np
 import torchvision
 from torchvision import transforms
-from utils import WarmupCosineSchedule, train
 from models import create_ViT
 from radam import RAdam
+from utils.scheduler import WarmupCosineSchedule
+from utils.train import train
 
 model = create_ViT(img_size=32, patch_size=4, num_classes=10)
 device="cuda:0"

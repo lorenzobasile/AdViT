@@ -1,32 +1,27 @@
 import timm
 import torch
-import torch.nn as nn
-from torch.utils.data import DataLoader
-import os
-import torchvision
 from torchvision import transforms
-from models import create_ViT
-from utils import train
+from utils.data import get_dataloaders
+from utils.train import train
 
 vit_models = ['vit_base_patch16_224', 'vit_base_patch32_224', 'vit_small_patch16_224',  'vit_small_patch32_224']
 
 data_transforms = {
     'train': transforms.Compose([
         transforms.Resize((224,224)),
-        transforms.ToTensor(),
-        #transforms.Normalize([0.5, 0.5, 0.5], [0.5, 0.5, 0.5])
+        transforms.ToTensor()
     ]),
     'test': transforms.Compose([
         transforms.Resize((224,224)),
-        transforms.ToTensor(),
-        #transforms.Normalize([0.5, 0.5, 0.5], [0.5, 0.5, 0.5])
+        transforms.ToTensor()
     ]),
 }
 
 
-data_dir = './data/imagenette2-320/'
-datasets = {x: torchvision.datasets.ImageFolder(os.path.join(data_dir, x), data_transforms[x]) for x in ['train', 'test']}
-dataloaders = {'train': DataLoader(datasets['train'], batch_size=128, shuffle=True),'test': DataLoader(datasets['test'], batch_size=128, shuffle=False)}
+dataloaders = get_dataloaders(data_dir='./data/imagenette2-320/',
+                              train_batch_size=128,
+                              test_batch_size=128,
+                              data_transforms=data_transforms)
 
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 

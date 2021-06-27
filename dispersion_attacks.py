@@ -1,12 +1,10 @@
 import timm
 import torch
-from torch.utils.data import DataLoader
 from deeprobust.image.attack.pgd import PGD
-from utils import kpixattack, mean_distance
-from datautils.data import get_dataloaders
+from utils.data import get_dataloaders
+from utils.attack import kpixel_attack, mean_distance
 from torchvision import transforms
-import torchvision
-import os
+
 
 outfile_name="./attack_results/test.txt"
 
@@ -68,7 +66,7 @@ for eps in epsilons:
             y=y.to(device)
             perturbed_x=adversaries[i].generate(x, y, epsilon=eps, step_size=eps/3, num_steps=10)
             for idx, k in enumerate(kappa):
-                perturbed_k=kpixattack(x, perturbed_x, k=k)
+                perturbed_k=kpixel_attack(x, perturbed_x, k=k)
                 mean[idx]+=mean_distance(perturbed_k-x)
         print('model: ', model_names[i], " mean: ", mean/len(dataloaders['train']))
         with open(outfile_name, 'a') as outfile:

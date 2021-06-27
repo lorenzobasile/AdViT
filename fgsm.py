@@ -1,30 +1,25 @@
 import timm
 import torch
 from deeprobust.image.attack.fgsm import FGSM
-from torch.utils.data import DataLoader
 from torchvision import transforms
-import torchvision
-import os
+from utils.data import get_dataloaders
 
 outfile_name="./attack_results/fgsm.txt"
 
 data_transforms = {
     'train': transforms.Compose([
-        transforms.Resize((224,224)),
-        transforms.ToTensor(),
-        #transforms.Normalize([0.5, 0.5, 0.5], [0.5, 0.5, 0.5])
+        transforms.Resize((224, 224)),
+        transforms.ToTensor()
     ]),
     'test': transforms.Compose([
-        transforms.Resize((224,224)),
-        transforms.ToTensor(),
-        #transforms.Normalize([0.5, 0.5, 0.5], [0.5, 0.5, 0.5])
+        transforms.Resize((224, 224)),
+        transforms.ToTensor()
     ]),
 }
-
-
-data_dir = './data/imagenette2-320/'
-datasets = {x: torchvision.datasets.ImageFolder(os.path.join(data_dir, x), data_transforms[x]) for x in ['train', 'test']}
-dataloaders = {'train': DataLoader(datasets['train'], batch_size=128, shuffle=True),'test': DataLoader(datasets['test'], batch_size=64, shuffle=False)}
+dataloaders = get_dataloaders(data_dir='./data/imagenette2-320/',
+                              train_batch_size=128,
+                              test_batch_size=64,
+                              data_transforms=data_transforms)
 
 model_names=['resnet18', 'tv_resnet50', 'tv_resnet101', 'vgg16', 'vit_base_patch16_224',  'vit_base_patch32_224',  'vit_small_patch16_224','vit_small_patch32_224']
 #model_names=['resnet18']
