@@ -2,7 +2,7 @@ import timm
 import torch
 from deeprobust.image.attack.pgd import PGD
 from utils.data import get_dataloaders
-from utils.attack import kpixel_attack, mean_distance
+from utils.attack import kpixel_attack, mean_distance, mean_weighted_distance
 from torchvision import transforms
 
 
@@ -59,6 +59,7 @@ for eps in epsilons:
         outfile.write("\nEpsilon: "+str(eps))
     for i, attacked_model in enumerate(models):
         mean=torch.zeros(len(kappa))
+        meanw=torch.zeros(len(kappa))
         correct=torch.zeros(len(models))
         correct_k=torch.zeros(len(models))
         for j, (x, y) in enumerate(dataloaders['test']):
@@ -68,7 +69,9 @@ for eps in epsilons:
             for idx, k in enumerate(kappa):
                 perturbed_k=kpixel_attack(x, perturbed_x, k=k)
                 mean[idx]+=mean_distance(perturbed_k-x)
+                meanw[idx]+=mean_weighted_distance(perturbed_k-x)
         print('model: ', model_names[i], " mean: ", mean/len(dataloaders['train']))
+        print('model: ', model_names[i], " weighted mean: ", meanw/len(dataloaders['train']))
         with open(outfile_name, 'a') as outfile:
              outfile.write("\nAttack on "+model_names[i]+": "+str(correct/len(dataloaders['test'].dataset)))
              outfile.write("\nk-Attack on "+model_names[i]+": "+str(correct_k/len(dataloaders['test'].dataset)))

@@ -22,3 +22,13 @@ def mean_distance(perturbation, p=2):
     nz = torch.stack([norm[i].nonzero() for i in range(B)])
     distances = torch.cdist(nz.float(), nz.float(), p=2).reshape(B, -1)
     return distances[distances > 0].mean()
+
+def mean_weighted_distance(perturbation, p=2):
+    B, C, H, W = perturbation.shape
+    norm = torch.norm(perturbation, dim=1)
+    nz = torch.stack([norm[i].nonzero() for i in range(B)])
+    distances = torch.cdist(nz.float(), nz.float(), p=2)
+    t=torch.stack([norm[i, nz[i,:,0], nz[i,:,1]] for i in range(B)])
+    z1=torch.mul(c, t.reshape(B,1,-1))
+    weighted_dist=torch.mul(t.reshape(B,-1,1), z1).reshape(B,-1)
+    return weighted_dist[weighted_dist > 0].mean()
