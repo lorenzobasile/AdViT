@@ -9,7 +9,7 @@ from models import create_ViT
 from utils.data import get_dataloaders
 from utils.train import train
 
-models = ['mixer_b16_224_in21k', 'mixer_l16_224_in21k']
+models = ['mixer_b16_224', 'mixer_l16_224']
 
 data_transforms = {
     'train': transforms.Compose([
@@ -44,5 +44,5 @@ for mod in models:
         p[1].requires_grad=False
         if p[0]=='head.weight' or p[0]=='head.bias':
             p[1].requires_grad=True
-    train(model, dataloaders, n_epochs, optimizer, outfile_name="./training_outputs/"+mod[:-10]+".txt", clip=True)
-    torch.save(model.head.state_dict(), "./trained_models/"+mod[:-10]+".pt") #to save memory
+    train(model, dataloaders, n_epochs, optimizer, outfile_name="./training_outputs/"+mod[:-4]+".txt", clip=True)
+    torch.save(model.head.state_dict(), "./trained_models/"+mod[:-4]+".pt") #to save memory
