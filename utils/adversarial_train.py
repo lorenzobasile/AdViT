@@ -43,7 +43,7 @@ def FGSMtrain(model, dataloaders, n_epochs, optimizer, eps, scheduler=None, outf
                 correct += (torch.argmax(out, axis=1) == y.to(device)).sum().item()
         if outfile_name is not None:
             with open(outfile_name, 'a') as outfile:
-                outfile.write(f"\n\nClean Accuracy on training set: {correct / len(dataloaders['train'].dataset) * 100:.5f} %")
+                outfile.write(f"\n\nClean Accuracy on training set: {correct / len(dataloaders['train'].dataset) * 100:.5f} %\n")
         print(f"\n\nClean Accuracy on training set: {correct / len(dataloaders['train'].dataset) * 100:.5f} %")
 
         correct_adv = 0
@@ -52,7 +52,7 @@ def FGSMtrain(model, dataloaders, n_epochs, optimizer, eps, scheduler=None, outf
             correct_adv += (torch.argmax(out_adv, axis=1) == y.to(device)).sum().item()
         if outfile_name is not None:
             with open(outfile_name, 'a') as outfile:
-                outfile.write(f"Adversarial Accuracy on training set: {correct_adv / len(dataloaders['train'].dataset) * 100:.5f} %")
+                outfile.write(f"Adversarial Accuracy on training set: {correct_adv / len(dataloaders['train'].dataset) * 100:.5f} %\n")
         print(f"Adversarial Accuracy on training set: {correct_adv / len(dataloaders['train'].dataset) * 100:.5f} %")
 
         correct = 0
@@ -62,7 +62,7 @@ def FGSMtrain(model, dataloaders, n_epochs, optimizer, eps, scheduler=None, outf
                 correct += (torch.argmax(out, axis=1) == y.to(device)).sum().item()
         if outfile_name is not None:
             with open(outfile_name, 'a') as outfile:
-                outfile.write(f"Clean Accuracy on test set: {correct / len(dataloaders['test'].dataset) * 100:.5f} %")
+                outfile.write(f"Clean Accuracy on test set: {correct / len(dataloaders['test'].dataset) * 100:.5f} %\n")
         print(f"Clean Accuracy on test set: {correct / len(dataloaders['test'].dataset) * 100:.5f} %")
 
         correct_adv = 0
@@ -71,7 +71,7 @@ def FGSMtrain(model, dataloaders, n_epochs, optimizer, eps, scheduler=None, outf
             correct_adv += (torch.argmax(out_adv, axis=1) == y.to(device)).sum().item()
         if outfile_name is not None:
             with open(outfile_name, 'a') as outfile:
-                outfile.write(f"Adversarial Accuracy on test set: {correct_adv / len(dataloaders['test'].dataset) * 100:.5f} %")
+                outfile.write(f"Adversarial Accuracy on test set: {correct_adv / len(dataloaders['test'].dataset) * 100:.5f} %\n")
         print(f"Adversarial Accuracy on test set: {correct_adv / len(dataloaders['test'].dataset) * 100:.5f} %")
 
 
@@ -115,7 +115,7 @@ def PGDtrain(model, dataloaders, n_epochs, optimizer, eps, scheduler=None, outfi
                 correct += (torch.argmax(out, axis=1) == y.to(device)).sum().item()
         if outfile_name is not None:
             with open(outfile_name, 'a') as outfile:
-                outfile.write(f"\n\nClean Accuracy on training set: {correct / len(dataloaders['train'].dataset) * 100:.5f} %")
+                outfile.write(f"\n\nClean Accuracy on training set: {correct / len(dataloaders['train'].dataset) * 100:.5f} %\n")
         print(f"\n\nClean Accuracy on training set: {correct / len(dataloaders['train'].dataset) * 100:.5f} %")
 
         correct_adv = 0
@@ -124,7 +124,7 @@ def PGDtrain(model, dataloaders, n_epochs, optimizer, eps, scheduler=None, outfi
             correct_adv += (torch.argmax(out_adv, axis=1) == y.to(device)).sum().item()
         if outfile_name is not None:
             with open(outfile_name, 'a') as outfile:
-                outfile.write(f"Adversarial Accuracy on training set: {correct_adv / len(dataloaders['train'].dataset) * 100:.5f} %")
+                outfile.write(f"Adversarial Accuracy on training set: {correct_adv / len(dataloaders['train'].dataset) * 100:.5f} %\n")
         print(f"Adversarial Accuracy on training set: {correct_adv / len(dataloaders['train'].dataset) * 100:.5f} %")
 
         correct = 0
@@ -134,7 +134,7 @@ def PGDtrain(model, dataloaders, n_epochs, optimizer, eps, scheduler=None, outfi
                 correct += (torch.argmax(out, axis=1) == y.to(device)).sum().item()
         if outfile_name is not None:
             with open(outfile_name, 'a') as outfile:
-                outfile.write(f"\nClean Accuracy on test set: {correct / len(dataloaders['test'].dataset) * 100:.5f} %")
+                outfile.write(f"\nClean Accuracy on test set: {correct / len(dataloaders['test'].dataset) * 100:.5f} %\n")
         print(f"\nClean Accuracy on test set: {correct / len(dataloaders['test'].dataset) * 100:.5f} %")
 
         correct_adv = 0
@@ -143,5 +143,5 @@ def PGDtrain(model, dataloaders, n_epochs, optimizer, eps, scheduler=None, outfi
             correct_adv += (torch.argmax(out_adv, axis=1) == y.to(device)).sum().item()
         if outfile_name is not None:
             with open(outfile_name, 'a') as outfile:
-                outfile.write(f"Adversarial Accuracy on test set: {correct_adv / len(dataloaders['test'].dataset) * 100:.5f} %")
+                outfile.write(f"Adversarial Accuracy on test set: {correct_adv / len(dataloaders['test'].dataset) * 100:.5f} %\n")
         print(f"Adversarial Accuracy on test set: {correct_adv / len(dataloaders['test'].dataset) * 100:.5f} %")
