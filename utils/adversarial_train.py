@@ -55,6 +55,7 @@ def FGSMtrain(model, dataloaders, n_epochs, optimizer, eps, scheduler=None, outf
                 outfile.write(f"Adversarial Accuracy on training set: {correct_adv / len(dataloaders['train'].dataset) * 100:.5f} %\n")
         print(f"Adversarial Accuracy on training set: {correct_adv / len(dataloaders['train'].dataset) * 100:.5f} %")
 
+        
         correct = 0
         with torch.no_grad():
             for x, y in dataloaders['test']:
@@ -73,7 +74,7 @@ def FGSMtrain(model, dataloaders, n_epochs, optimizer, eps, scheduler=None, outf
             with open(outfile_name, 'a') as outfile:
                 outfile.write(f"Adversarial Accuracy on test set: {correct_adv / len(dataloaders['test'].dataset) * 100:.5f} %\n")
         print(f"Adversarial Accuracy on test set: {correct_adv / len(dataloaders['test'].dataset) * 100:.5f} %")
-
+        
 
 
 def PGDtrain(model, dataloaders, n_epochs, optimizer, eps, scheduler=None, outfile_name=None, clip=False):
