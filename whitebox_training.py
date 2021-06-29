@@ -1,7 +1,7 @@
 import argparse
 # from deeprobust.image.defense.fgsmtraining import FGSMtraining
-from utils.adversarial_train import FGSMtrain
-from utils.adversarial_train import PGDtrain
+from utils.adversarial_train import ADVtrain
+#from utils.adversarial_train import PGDtrain
 # from deeprobust.image.defense.pgdtraining import PGDtraining
 from torchvision import transforms
 from utils.data import get_dataloaders
@@ -53,13 +53,13 @@ for i, model_name in enumerate(model_names):
         else:
             model.fc.load_state_dict(torch.load(f"trained_models/{model_name}.pt"))
         '''
-        model.eval()
-        
+
+
         name_model = 'vit_' + model_name[4:-4] if 'vit' in model_name else model_name
 
         if args.attack == 'FGSM':
             print(f"FGSM Training for {name_model}, eps={eps:.3f}")
-            FGSMtrain(model, dataloaders,
+            ADVtrain(model, args.attack, dataloaders,
                       n_epochs=10,
                       optimizer=optimizer,
                       outfile_name=f"./training_outputs/{name_model}_{args.attack}_eps{eps:.3f}.txt",
@@ -67,7 +67,7 @@ for i, model_name in enumerate(model_names):
                       clip=True)
         elif args.attack == 'PGD':
             print(f"PGD Training for {name_model}, eps={eps:.3f}")
-            PGDtrain(model, dataloaders,
+            PGDtrain(model, args.attack, dataloaders,
                      n_epochs=10,
                      optimizer=optimizer,
                      outfile_name=f"./training_outputs/{name_model}_{args.attack}_eps{eps:.3f}.txt",
