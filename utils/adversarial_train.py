@@ -35,7 +35,7 @@ def ADVtrain(model, adversarytype, dataloaders, n_epochs, optimizer, eps, schedu
             out_adv=model(x_adv)
             correct += (torch.argmax(out, axis=1) == y).sum().item()
             correct_adv += (torch.argmax(out_adv, axis=1) == y).sum().item()
-            l=loss(out, y)
+            l=loss(out_adv, y)
             optimizer.zero_grad()
             l.backward()
             if clip:
@@ -49,7 +49,7 @@ def ADVtrain(model, adversarytype, dataloaders, n_epochs, optimizer, eps, schedu
         print(f"Adversarial Accuracy on training set: {correct_adv / len(dataloaders['train'].dataset) * 100:.5f} %")
         if scheduler is not None:
             scheduler.step()
-
+        model.eval()
         correct_adv=0
         correct=0
         for x, y in dataloaders['test']:

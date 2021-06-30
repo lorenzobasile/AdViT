@@ -1,0 +1,68 @@
+
+Epoch: 0/10
+
+Clean Accuracy on training set: 99.51420 %
+Adversarial Accuracy on training set: 84.65519 %
+Clean Accuracy on test set: 99.05732 %
+Adversarial Accuracy on test set: 75.26115 %
+
+Epoch: 1/10
+
+Clean Accuracy on training set: 99.14458 %
+Adversarial Accuracy on training set: 83.93706 %
+Clean Accuracy on test set: 98.80255 %
+Adversarial Accuracy on test set: 82.67516 %
+
+Epoch: 2/10
+
+Clean Accuracy on training set: 99.11289 %
+Adversarial Accuracy on training set: 87.52772 %
+Clean Accuracy on test set: 98.59873 %
+Adversarial Accuracy on test set: 85.83439 %
+
+Epoch: 3/10
+
+Clean Accuracy on training set: 99.22906 %
+Adversarial Accuracy on training set: 90.15736 %
+Clean Accuracy on test set: 98.72611 %
+Adversarial Accuracy on test set: 88.48408 %
+
+Epoch: 4/10
+
+Clean Accuracy on training set: 99.39804 %
+Adversarial Accuracy on training set: 92.63914 %
+Clean Accuracy on test set: 98.85350 %
+Adversarial Accuracy on test set: 90.26752 %
+
+Epoch: 5/10
+
+Clean Accuracy on training set: 99.50364 %
+Adversarial Accuracy on training set: 94.13877 %
+Clean Accuracy on test set: 98.64968 %
+Adversarial Accuracy on test set: 90.52229 %
+
+Epoch: 6/10
+
+Clean Accuracy on training set: 99.64093 %
+Adversarial Accuracy on training set: 95.40606 %
+Clean Accuracy on test set: 98.72611 %
+Adversarial Accuracy on test set: 90.70064 %
+
+Epoch: 7/10
+
+Clean Accuracy on training set: 99.73598 %
+Adversarial Accuracy on training set: 95.92354 %
+Clean Accuracy on test set: 98.64968 %
+Adversarial Accuracy on test set: 91.54140 %
+
+Epoch: 8/10
+
+Clean Accuracy on training set: 99.84159 %
+Adversarial Accuracy on training set: 97.02186 %
+Clean Accuracy on test set: 98.67516 %
+Adversarial Accuracy on test set: 91.59236 %
+
+Epoch: 9/10
+
+Clean Accuracy on training set: 99.85215 %
+Adversarial Accuracy on training set: 97.65551 %

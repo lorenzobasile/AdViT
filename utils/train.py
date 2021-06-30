@@ -26,3 +26,13 @@ def train(model, dataloaders, n_epochs, optimizer, scheduler=None, outfile_name=
         if scheduler is not None:
             scheduler.step()
         model.eval()
+        for i in ['train', 'test']:
+            correct=0
+            with torch.no_grad():
+                for x, y in dataloaders[i]:
+                    out=model(x.to(device))
+                    correct+=(torch.argmax(out, axis=1)==y.to(device)).sum().item()
+            if outfile_name is not None:
+                with open(outfile_name, 'a') as outfile:
+                    outfile.write("\nAccuracy on "+i+" set: "+str(correct/len(dataloaders[i].dataset)))
+            print("Accuracy on "+i+" set: ", correct/len(dataloaders[i].dataset))

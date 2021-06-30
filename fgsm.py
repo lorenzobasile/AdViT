@@ -23,7 +23,7 @@ dataloaders = get_dataloaders(data_dir='./data/imagenette2-320/',
 
 model_names=['resnet18', 'tv_resnet50', 'tv_resnet101', 'vgg16', 'vit_base_patch16_224',  'vit_base_patch32_224',  'vit_small_patch16_224','vit_small_patch32_224']
 #model_names=['resnet18']
-epsilons=[0.001, 0.005, 0.01, 0.05, 0.1]
+epsilons=[0.0005, 0.001, 0.005, 0.01]
 #epsilons=[10]
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
