@@ -4,7 +4,7 @@ from deeprobust.image.attack.fgsm import FGSM
 from torchvision import transforms
 from utils.data import get_dataloaders
 
-outfile_name="./attack_results/fgsm.txt"
+outfile_name="./attack_results/fgsm_robust.txt"
 
 data_transforms = {
     'train': transforms.Compose([
@@ -21,10 +21,8 @@ dataloaders = get_dataloaders(data_dir='./data/imagenette2-320/',
                               test_batch_size=64,
                               data_transforms=data_transforms)
 
-model_names=['resnet18', 'tv_resnet50', 'tv_resnet101', 'vgg16', 'vit_base_patch16_224',  'vit_base_patch32_224',  'vit_small_patch16_224','vit_small_patch32_224']
-#model_names=['resnet18']
+model_names=['tv_resnet101','vit_base_patch16_224']
 epsilons=[0.0005, 0.001, 0.005, 0.01]
-#epsilons=[10]
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
 models=[timm.create_model(model_name, pretrained=True, num_classes=10).to(device) for model_name in model_names]
@@ -32,11 +30,9 @@ models=[timm.create_model(model_name, pretrained=True, num_classes=10).to(device
 
 for i, model_name in enumerate(model_names):
     if 'vit' in model_name:
-        models[i].head.load_state_dict(torch.load("./trained_models/in1k"+model_name[4:-4]+".pt"))
-    elif 'vgg' in model_name:
-        models[i].head.fc.load_state_dict(torch.load("./trained_models/vgg16.pt"))
+        models[i].head.load_state_dict(torch.load("./trained_models/"+model_name[4:-4]+"_PGD_eps0.0100.pt"))
     else:
-        models[i].load_state_dict(torch.load("./trained_models/"+model_name+".pt"))
+        models[i].load_state_dict(torch.load("./trained_models/"+model_name+"_PGD_eps0.0100.pt"))
     models[i].eval()
 
 correct=torch.zeros(len(models))
