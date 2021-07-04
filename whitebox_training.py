@@ -40,7 +40,7 @@ model_names =['tv_resnet101']
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 models = [timm.create_model(model_name, pretrained=True, num_classes=10).to(device) for model_name in model_names]
 
-epsilons = [0.0005]
+epsilons = [0.0010, 0.0050, 0.0100]
 
 for i, model_name in enumerate(model_names):
     for eps in epsilons:

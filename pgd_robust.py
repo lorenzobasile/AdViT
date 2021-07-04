@@ -38,7 +38,7 @@ models=[timm.create_model(model_name, pretrained=True, num_classes=10).to(device
 
 for i, model_name in enumerate(model_names):
     if 'vit' in model_name:
-        models[i].head.load_state_dict(torch.load("./trained_models/"+model_name[4:-4]+"_PGD_eps0.0100.pt"))
+        models[i].head.load_state_dict(torch.load("./trained_models/"+model_name+"_PGD_eps0.0100.pt"))
     else:
         models[i].load_state_dict(torch.load("./trained_models/"+model_name+"_PGD_eps0.0100.pt"))
     models[i].eval()

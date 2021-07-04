@@ -10,10 +10,6 @@ def ADVtrain(model, adversarytype, dataloaders, n_epochs, optimizer, eps, schedu
     if outfile_name is not None:
         with open(outfile_name, 'w') as outfile:
             outfile.write("")
-    if adversarytype=='FGSM':
-        adversary = FGSM(model, 'cuda')
-    if adversarytype=='PGD':
-        adversary = PGD(model, 'cuda')
     for epoch in range(n_epochs):
 
         if outfile_name is not None:
@@ -28,9 +24,11 @@ def ADVtrain(model, adversarytype, dataloaders, n_epochs, optimizer, eps, schedu
             x=x.to(device)
             y=y.to(device)
             if adversarytype=='FGSM':
+                adversary = FGSM(model, 'cuda')
                 x_adv = adversary.generate(x, y, epsilon=eps)
             if adversarytype=='PGD':
-                x_adv = adversary.generate(x, y, epsilon=eps, step_size=eps/3, num_steps=10)
+                adversary = PGD(model, 'cuda')
+                x_adv = adversary.generate(x, y, epsilon=eps, step_size=eps/3, num_steps=10)               
             out=model(x)
             out_adv=model(x_adv)
             correct += (torch.argmax(out, axis=1) == y).sum().item()
