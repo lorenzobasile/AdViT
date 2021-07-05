@@ -1,13 +1,13 @@
-Clean accuracy: tensor([0.9434, 0.9972])
+Clean accuracy: tensor([0.9434, 0.9832])
 Epsilon: 0.0005
-Attack on tv_resnet101: tensor([0.9401, 0.9969])
-Attack on vit_base_patch16_224: tensor([0.9434, 0.9875])
+Attack on tv_resnet101: tensor([0.9401, 0.9827])
+Attack on vit_base_patch16_224: tensor([0.9432, 0.9804])
 Epsilon: 0.001
-Attack on tv_resnet101: tensor([0.9348, 0.9969])
-Attack on vit_base_patch16_224: tensor([0.9434, 0.9521])
+Attack on tv_resnet101: tensor([0.9348, 0.9824])
+Attack on vit_base_patch16_224: tensor([0.9424, 0.9781])
 Epsilon: 0.005
-Attack on tv_resnet101: tensor([0.8848, 0.9962])
-Attack on vit_base_patch16_224: tensor([0.9427, 0.2153])
+Attack on tv_resnet101: tensor([0.8851, 0.9789])
+Attack on vit_base_patch16_224: tensor([0.9378, 0.9559])
 Epsilon: 0.01
-Attack on tv_resnet101: tensor([0.7985, 0.9957])
-Attack on vit_base_patch16_224: tensor([0.9422, 0.0324])
+Attack on tv_resnet101: tensor([0.7977, 0.9768])
+Attack on vit_base_patch16_224: tensor([0.9266, 0.9024])

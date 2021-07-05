@@ -40,7 +40,7 @@ model_names =['vit_base_patch16_224']
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 models = [timm.create_model(model_name, pretrained=True, num_classes=10).to(device) for model_name in model_names]
 
-epsilons = [0.0005, 0.0010, 0.0050, 0.0100]
+epsilons = [0.0100]
 
 for i, model_name in enumerate(model_names):
     for eps in epsilons:
@@ -68,7 +68,7 @@ for i, model_name in enumerate(model_names):
                       eps=eps,
                       clip=True)
         if 'vit' in model_name:
-            torch.save(model.head.state_dict(), f"trained_models/{model_name}_{args.attack}_eps{eps:.4f}.pt")
+            torch.save(model.state_dict(), f"trained_models/{model_name}_{args.attack}_eps{eps:.4f}.pt")
 
         elif model_name == 'vgg16':
             torch.save(model.head.fc.state_dict(),
