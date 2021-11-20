@@ -1,3 +1,5 @@
+import os
+
 import timm
 import torch
 from torch import nn
@@ -28,18 +30,29 @@ def get_vit_names():
     return ['vit_base_patch16_224', 'vit_base_patch32_224', 'vit_small_patch16_224', 'vit_small_patch32_224']
 
 
-def load_trained_models(models_dict):
+def load_trained_models(models_dict, trained_models_folder='normal_training'):
     """
     Loads trained models (on imagenette) from trained models folder
     :param models_dict: dictionary of models
     """
+
+    # raise error if trained_models_folder is not the name of a folder inside trained_models
+    if trained_models_folder not in os.listdir('trained_models'):
+        raise ValueError('trained_models_folder must be the name of a folder inside trained_models')
+
     for model_name, model in models_dict.items():
-        if 'vit' in model_name:
-            model.head.load_state_dict(torch.load("./trained_models/in1k" + model_name[4:-4] + ".pt"))
-        elif 'vgg' in model_name:
-            model.head.fc.load_state_dict(torch.load("./trained_models/vgg16.pt"))
-        else:
-            model.load_state_dict(torch.load("./trained_models/" + model_name + ".pt"))
+        if trained_models_folder == "adversarial_training":
+            if 'vit' in model_name:
+                model.load_state_dict(torch.load(f"./trained_models/{trained_models_folder}/{model_name}_PGD_eps0.0100.pt"))
+            else:
+                model.load_state_dict(torch.load(f"./trained_models/{trained_models_folder}/{model_name}_PGD_eps0.0100.pt"))
+        elif trained_models_folder == "normal_training":
+            if 'vit' in model_name:
+                model.head.load_state_dict(torch.load("./trained_models/in1k" + model_name[4:-4] + ".pt"))
+            elif 'vgg' in model_name:
+                model.head.fc.load_state_dict(torch.load("./trained_models/vgg16.pt"))
+            else:
+                model.load_state_dict(torch.load("./trained_models/" + model_name + ".pt"))
         model.eval()
 
 
