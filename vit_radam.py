@@ -4,7 +4,6 @@ import torch.nn as nn
 import numpy as np
 import torchvision
 from torchvision import transforms
-from models import create_ViT
 from radam import RAdam
 from utils.scheduler import WarmupCosineSchedule
 from utils.train import train

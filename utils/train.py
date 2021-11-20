@@ -36,3 +36,4 @@ def train(model, dataloaders, n_epochs, optimizer, scheduler=None, outfile_name=
                 with open(outfile_name, 'a') as outfile:
                     outfile.write("\nAccuracy on "+i+" set: "+str(correct/len(dataloaders[i].dataset)))
             print("Accuracy on "+i+" set: ", correct/len(dataloaders[i].dataset))
+

@@ -1,3 +1,5 @@
+# TODO: remove this file ?
+
 import timm
 import torch
 import torch.nn as nn
@@ -5,7 +7,6 @@ from torch.utils.data import DataLoader
 import os
 import torchvision
 from torchvision import transforms
-from models import create_ViT
 from utils.data import get_dataloaders
 from utils.train import train
 

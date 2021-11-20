@@ -19,7 +19,7 @@ args = parser.parse_args()
 if args.attack not in ['fgsm', 'pgd']:
     raise ValueError('attack must be either fgsm or pgd')
 
-# get dataloaeders
+# get dataloaders
 dataloaders = get_dataloaders(data_dir=args.data,
                               train_batch_size=args.train_batch_size,
                               test_batch_size=args.test_batch_size)
