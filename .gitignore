@@ -141,3 +141,6 @@ data/
 # Std out and err folders
 stdout/
 stderr/
+
+# exmaple images
+examples/

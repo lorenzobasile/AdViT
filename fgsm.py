@@ -1,68 +1,32 @@
 import timm
 import torch
-from deeprobust.image.attack.fgsm import FGSM
-from torchvision import transforms
+
+from utils.adversarial import evaluate_clean_accuracy, evaluate_adversarial_accuracy
 from utils.data import get_dataloaders
+import argparse
 
-outfile_name="./attack_results/fgsm.txt"
+from utils.model import get_model_names, load_trained_models
 
-data_transforms = {
-    'train': transforms.Compose([
-        transforms.Resize((224, 224)),
-        transforms.ToTensor()
-    ]),
-    'test': transforms.Compose([
-        transforms.Resize((224, 224)),
-        transforms.ToTensor()
-    ]),
-}
-dataloaders = get_dataloaders(data_dir='./data/imagenette2-320/',
-                              train_batch_size=128,
-                              test_batch_size=64,
-                              data_transforms=data_transforms)
+parser = argparse.ArgumentParser(description='FGSM attack -- accuracy evaluation')
+parser.add_argument('--outfile', type=str, default="./attack_results/fgsm.txt", help='output file')
+parser.add_argument('--data', type=str, default='./data/imagenette2-320/', help='dataset name')
+parser.add_argument('--train_batch_size', type=int, default=128, help='train batch size')
+parser.add_argument('--test_batch_size', type=int, default=64, help='test batch size')
 
-model_names=['resnet18', 'tv_resnet50', 'tv_resnet101', 'vgg16', 'vit_base_patch16_224',  'vit_base_patch32_224',  'vit_small_patch16_224','vit_small_patch32_224']
-#model_names=['resnet18']
-epsilons=[0.0005, 0.001, 0.005, 0.01]
-#epsilons=[10]
+args = parser.parse_args()
+
+dataloaders = get_dataloaders(data_dir=args.data,
+                              train_batch_size=args.train_batch_size,
+                              test_batch_size=args.test_batch_size)
+
+epsilons = [0.0005, 0.001, 0.005, 0.01]
+
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+print("Device:", device)
+models = {model_name: timm.create_model(model_name, pretrained=True, num_classes=10).to(device) for model_name in get_model_names()}
+print("Models:", models)
 
-models=[timm.create_model(model_name, pretrained=True, num_classes=10).to(device) for model_name in model_names]
+load_trained_models(models)
 
-
-for i, model_name in enumerate(model_names):
-    if 'vit' in model_name:
-        models[i].head.load_state_dict(torch.load("./trained_models/in1k"+model_name[4:-4]+".pt"))
-    elif 'vgg' in model_name:
-        models[i].head.fc.load_state_dict(torch.load("./trained_models/vgg16.pt"))
-    else:
-        models[i].load_state_dict(torch.load("./trained_models/"+model_name+".pt"))
-    models[i].eval()
-
-correct=torch.zeros(len(models))
-for x, y in dataloaders['test']:
-        x=x.to(device)
-        y=y.to(device)
-        for k, model in enumerate(models):
-            temp=torch.argmax(model(x), axis=1)==y
-            correct[k]+=temp.sum().item()
-with open(outfile_name, 'w') as outfile:
-    outfile.write("Clean accuracy: "+str(correct/len(dataloaders['test'].dataset)))
-print("Clean accuracy: ", correct/len(dataloaders['test'].dataset))
-
-adversaries=[FGSM(model, 'cuda') for model in models]
-for eps in epsilons:
-    with open(outfile_name, 'a') as outfile:
-        outfile.write("\nEpsilon: "+str(eps))
-    for i, attacked_model in enumerate(models):
-        correct=torch.zeros(len(models))
-        for x, y in dataloaders['test']:
-            x=x.to(device)
-            y=y.to(device)
-            perturbed_x=adversaries[i].generate(x, y, epsilon=eps)
-            for k, model in enumerate(models):
-                temp=torch.argmax(model(perturbed_x), axis=1)==y
-                correct[k]+=temp.sum().item()
-        with open(outfile_name, 'a') as outfile:
-             outfile.write("\nAttack on "+model_names[i]+": "+str(correct/len(dataloaders['test'].dataset)))
-        print("Attack on "+model_names[i]+": ", correct/len(dataloaders['test'].dataset))
+evaluate_clean_accuracy(models_dict=models, dataloaders=dataloaders, device=device, outfile=args.outfile)
+evaluate_adversarial_accuracy(models_dict=models, dataloaders=dataloaders, device=device, outfile=args.outfile, epsilons=epsilons, attack="FGSM")
