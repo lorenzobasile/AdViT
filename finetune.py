@@ -33,9 +33,9 @@ dataloaders = get_dataloaders(data_dir=args.data,
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
 
-for model in model_names:
-    print(f'\nTraining {model} model...')
-    model = timm.create_model(model, pretrained=True, num_classes=10)
+for model_name in model_names:
+    print(f'\nTraining {model_name} model...')
+    model = timm.create_model(model_name, pretrained=True, num_classes=10)
     model = model.to(device)
     optimizer = torch.optim.SGD(model.parameters(), lr=args.lr, momentum=0.9)
     if args.model_type == 'vit':
@@ -44,9 +44,9 @@ for model in model_names:
             if p[0] == 'head.weight' or p[0] == 'head.bias':
                 p[1].requires_grad = True
 
-    model_name = model if args.model_type == 'cnn' else model[4:-4]
+    model_name = model_name if args.model_type == 'cnn' else model_name[4:-4]
 
-    train(model, dataloaders, args.epochs, optimizer, outfile_name="training_outputs/" + model_name + "test.txt", clip=True)
+    train(model, dataloaders, args.epochs, optimizer, outfile_name=f"training_outputs/{model_name}test.txt", clip=True)
 
     if model == 'vgg16':
         torch.save(model.state_dict(), "trained_models/" + model_name + "test.pt")  # to save memory
