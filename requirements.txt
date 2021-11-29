@@ -1,5 +1,5 @@
 deeprobust==0.2.2
 numpy==1.20.2
-timm @ git+https://github.com/rwightman/pytorch-image-models.git@dc422820eca4e550a4057561e595fc8b36209137
+timm @ git+https://github.com/lorenzobasile/pytorch-image-models
 torch==1.4.0
 torchvision==0.5.0
