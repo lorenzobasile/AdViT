@@ -16,7 +16,12 @@ def train(model, dataloaders, n_epochs, optimizer, scheduler=None, outfile_name=
         for x, y in dataloaders['train']:
             x=x.to(device)
             y=y.to(device)
-            out=model(x)
+            out,rep=model(x)
+            for r in rep:
+                try:
+                    print(r.shape)
+                except:
+                    print(r)
             l=loss(out, y)
             optimizer.zero_grad()
             l.backward()

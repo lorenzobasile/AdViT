@@ -19,7 +19,7 @@ def get_cnn_names():
     Returns a list of all cnn names
     :return: list of cnn names
     """
-    return ['resnet18', 'tv_resnet50', 'tv_resnet101', 'vgg16']
+    return ['resnet18', 'tv_resnet50', 'tv_resnet101',  'vgg16']
 
 
 def get_vit_names():
@@ -48,11 +48,11 @@ def load_trained_models(models_dict, trained_models_folder='normal_training'):
                 model.load_state_dict(torch.load(f"./trained_models/{trained_models_folder}/{model_name}_PGD_eps0.0100.pt"))
         elif trained_models_folder == "normal_training":
             if 'vit' in model_name:
-                model.head.load_state_dict(torch.load("./trained_models/in1k" + model_name[4:-4] + ".pt"))
+                model.head.load_state_dict(torch.load("./trained_models/normal_training/in1k" + model_name[4:-4] + ".pt"))
             elif 'vgg' in model_name:
-                model.head.fc.load_state_dict(torch.load("./trained_models/vgg16.pt"))
+                model.head.fc.load_state_dict(torch.load("./trained_models/normal_training/vgg16.pt"))
             else:
-                model.load_state_dict(torch.load("./trained_models/" + model_name + ".pt"))
+                model.load_state_dict(torch.load("./trained_models/normal_training/" + model_name + ".pt"))
         model.eval()
 
 

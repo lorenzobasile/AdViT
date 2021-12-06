@@ -6,7 +6,7 @@ from utils.model import get_cnn_names, get_vit_names
 from utils.train import train
 
 parser = argparse.ArgumentParser(description='PyTorch ImageNette Fimetune')
-parser.add_argument('--model_type', type=str, default='cnn', help="network architecture")
+parser.add_argument('--model_type', type=str, default='vit', help="network architecture")
 parser.add_argument('--data', type=str, default='./data/imagenette2-320/', help='path to dataset')
 parser.add_argument('--train_batch_size', type=int, default=128, help='train batch size')
 parser.add_argument('--test_batch_size', type=int, default=64, help='test batch size')

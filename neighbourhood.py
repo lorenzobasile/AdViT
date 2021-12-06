@@ -1,7 +1,6 @@
 import timm
 import torch
 
-from utils.adversarial import evaluate_clean_accuracy, evaluate_adversarial_accuracy
 from utils.data import get_dataloaders
 from utils.neighbours import extract_neighbourhoods
 import argparse
@@ -25,10 +24,11 @@ print("Device:", device)
 
 # generate pretrained models with timm
 models = {model_name: timm.create_model(model_name, pretrained=True, num_classes=10).to(device) for model_name in get_model_names()}
-print("Models:", models)
+print("Models:", models.keys())
 
 # load trained models on imagenette2-320
 load_trained_models(models, trained_models_folder=args.model_folder)
 
-for model in models:
+for model in models.items():
+    print(model)
     extract_neighbourhoods(model, dataloaders['test'])
