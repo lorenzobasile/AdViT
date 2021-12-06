@@ -29,6 +29,6 @@ print("Models:", models.keys())
 # load trained models on imagenette2-320
 load_trained_models(models, trained_models_folder=args.model_folder)
 
-for model in models.items():
-    print(model)
+for model_name, model in models.items():
+    print(model_name)
     extract_neighbourhoods(model, dataloaders['test'])

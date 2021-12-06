@@ -7,7 +7,7 @@ import timm
 
 parser = argparse.ArgumentParser(description='Adversarial training')
 parser.add_argument('--data_dir', default='data/imagenette2-320/', type=str)
-parser.add_argument('--attack', default='PGD', type=str)
+parser.add_argument('--attack', default='fgsm', type=str)
 parser.add_argument('--train_batch_size', default=32, type=int)
 parser.add_argument('--test_batch_size', default=32, type=int)
 parser.add_argument('--epochs', default=15, type=int)
@@ -15,7 +15,7 @@ parser.add_argument('--lr', default=3e-2, type=float)
 
 args = parser.parse_args()
 
-if args.attack not in ['FGSM', 'PGD']:
+if args.attack not in ['fgsm', 'pgd']:
     raise ValueError(f"{args.attack} has no available adversarial training")
 
 dataloaders = get_dataloaders(data_dir=args.data_dir,

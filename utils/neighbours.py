@@ -13,7 +13,7 @@ def extract_neighbourhoods(model, dataloader, k=10):
         _, repr=model(x)
         if i==0:
             k_dist=torch.ones((len(repr), N, k))*torch.inf
-            k_neighbours=torch.zeros((len(repr), N, k), dtype=torch.int)    
+            k_neighbours=torch.zeros((len(repr), N, k), dtype=torch.int)
         for j, (xp, yp) in enumerate(dataloader):
             _, reprp=model(xp)
             for h in range(n_representations):
