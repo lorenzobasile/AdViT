@@ -38,17 +38,16 @@ for model_name in model_names:
     model = timm.create_model(model_name, pretrained=True, num_classes=10)
     model = model.to(device)
     optimizer = torch.optim.SGD(model.parameters(), lr=args.lr, momentum=0.9)
+    for p in model.named_parameters():
+        p[1].requires_grad=False
+        if p[0]=='fc.weight' or p[0]=='head.weight' or p[0]=='fc.bias' or p[0]=='head.bias':
+            p[1].requires_grad=True
+
+    train(model, dataloaders, args.epochs, optimizer, outfile_name=f"training_outputs/{model_name}.txt", clip=True)
+    torch.save(model.state_dict(), "trained_models/normal_training/" + model_name + ".pt")
+    '''
     if args.model_type == 'vit':
-        for p in model.named_parameters():
-            p[1].requires_grad = False
-            if p[0] == 'head.weight' or p[0] == 'head.bias':
-                p[1].requires_grad = True
-
-    model_name = model_name if args.model_type == 'cnn' else model_name[4:-4]
-
-    train(model, dataloaders, args.epochs, optimizer, outfile_name=f"training_outputs/{model_name}test.txt", clip=True)
-
-    if model == 'vgg16':
-        torch.save(model.state_dict(), "trained_models/" + model_name + "test.pt")  # to save memory
+        torch.save(model.head.state_dict(), "trained_models/normal_training/" + model_name + ".pt")  # to save memory
     else:
-        torch.save(model.state_dict(), "trained_models/" + model_name + ".pt")
+        torch.save(model.fc.state_dict(), "trained_models/normal_training/" + model_name + ".pt")
+    '''

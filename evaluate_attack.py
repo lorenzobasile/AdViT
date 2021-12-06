@@ -7,7 +7,7 @@ import argparse
 
 from utils.model import get_model_names, load_trained_models
 
-parser = argparse.ArgumentParser(description='FGSM attack -- accuracy evaluation')
+parser = argparse.ArgumentParser(description='FGSM/PGD attack -- accuracy evaluation')
 parser.add_argument('--model_folder', type=str, default='normal_training', help="model folder")
 parser.add_argument('--outfile', type=str, default="./attack_results/fgsm.txt", help='output file')
 parser.add_argument('--data', type=str, default='./data/imagenette2-320/', help='dataset name')
@@ -30,7 +30,6 @@ print("Device:", device)
 
 # generate pretrained models with timm
 models = {model_name: timm.create_model(model_name, pretrained=True, num_classes=10).to(device) for model_name in get_model_names()}
-print("Models:", models)
 
 # load trained models on imagenette2-320
 load_trained_models(models, trained_models_folder=args.model_folder)

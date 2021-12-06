@@ -19,7 +19,7 @@ def evaluate_clean_accuracy(models_dict, dataloaders, device, outfile):
     for x, y in dataloaders['test']:
         x = x.to(device)
         y = y.to(device)
-        for k, model in enumerate(models_dict):
+        for k, (name,model) in enumerate(models_dict.items()):
             temp = torch.argmax(model(x), axis=1) == y
             correct[k] += temp.sum().item()
 

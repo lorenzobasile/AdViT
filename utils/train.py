@@ -3,25 +3,21 @@ import torch
 
 def train(model, dataloaders, n_epochs, optimizer, scheduler=None, outfile_name=None, clip=False):
     loss=torch.nn.CrossEntropyLoss()
-    device=torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+    device=torch.device("cuda:0" if next(model.parameters()).is_cuda else "cpu")
     if outfile_name is not None:
         with open(outfile_name, 'w') as outfile:
             outfile.write("")
     for epoch in range(n_epochs):
         if outfile_name is not None:
             with open(outfile_name, 'a') as outfile:
-                outfile.write("\nEpoch: "+str(epoch)+'/'+str(n_epochs))
-        print("Epoch: ", epoch, '/', n_epochs)
+                outfile.write("\nEpoch: "+str(epoch+1)+'/'+str(n_epochs))
+        print("Epoch: ", epoch+1, '/', n_epochs)
         model.train()
         for x, y in dataloaders['train']:
             x=x.to(device)
             y=y.to(device)
             out,rep=model(x)
             for r in rep:
-                try:
-                    print(r.shape)
-                except:
-                    print(r)
             l=loss(out, y)
             optimizer.zero_grad()
             l.backward()
@@ -41,4 +37,3 @@ def train(model, dataloaders, n_epochs, optimizer, scheduler=None, outfile_name=
                 with open(outfile_name, 'a') as outfile:
                     outfile.write("\nAccuracy on "+i+" set: "+str(correct/len(dataloaders[i].dataset)))
             print("Accuracy on "+i+" set: ", correct/len(dataloaders[i].dataset))
-
