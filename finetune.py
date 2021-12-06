@@ -30,7 +30,7 @@ dataloaders = get_dataloaders(data_dir=args.data,
                               test_batch_size=args.test_batch_size)
 
 # get device
-device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+device = torch.device("cuda:1" if torch.cuda.is_available() else "cpu")
 
 
 for model_name in model_names:

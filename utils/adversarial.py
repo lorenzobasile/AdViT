@@ -20,7 +20,7 @@ def evaluate_clean_accuracy(models_dict, dataloaders, device, outfile):
         x = x.to(device)
         y = y.to(device)
         for k, (name,model) in enumerate(models_dict.items()):
-            temp = torch.argmax(model(x), axis=1) == y
+            temp = torch.argmax(model(x)[0], axis=1) == y
             correct[k] += temp.sum().item()
 
     with open(outfile, 'w') as outfile:
@@ -79,7 +79,7 @@ def evaluate_adversarial_accuracy(models_dict, dataloaders, device, outfile, eps
 
                 # Loop on every model and evaluate accuracy wrt adversarial example
                 for k, model in enumerate(models_dict):
-                    temp = torch.argmax(model(perturbed_x), axis=1) == y
+                    temp = torch.argmax(model(perturbed_x)[0], axis=1) == y
                     correct[k] += temp.sum().item()
 
                 # K Pixel Attack
@@ -87,7 +87,7 @@ def evaluate_adversarial_accuracy(models_dict, dataloaders, device, outfile, eps
                     perturbed_x = kpixel_attack(x, perturbed_x, k=k)
 
                     for k, model in enumerate(models_dict):
-                        temp = torch.argmax(model(perturbed_x), axis=1) == y
+                        temp = torch.argmax(model(perturbed_x)[0], axis=1) == y
                         correct_k[k] += temp.sum().item()
 
             # Logging results on outfile

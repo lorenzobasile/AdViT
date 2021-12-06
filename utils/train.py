@@ -3,7 +3,7 @@ import torch
 
 def train(model, dataloaders, n_epochs, optimizer, scheduler=None, outfile_name=None, clip=False):
     loss=torch.nn.CrossEntropyLoss()
-    device=torch.device("cuda:0" if next(model.parameters()).is_cuda else "cpu")
+    device=torch.device("cuda:1" if next(model.parameters()).is_cuda else "cpu")
     if outfile_name is not None:
         with open(outfile_name, 'w') as outfile:
             outfile.write("")
@@ -16,8 +16,7 @@ def train(model, dataloaders, n_epochs, optimizer, scheduler=None, outfile_name=
         for x, y in dataloaders['train']:
             x=x.to(device)
             y=y.to(device)
-            out,rep=model(x)
-            for r in rep:
+            out,_=model(x)
             l=loss(out, y)
             optimizer.zero_grad()
             l.backward()
@@ -31,7 +30,7 @@ def train(model, dataloaders, n_epochs, optimizer, scheduler=None, outfile_name=
             correct=0
             with torch.no_grad():
                 for x, y in dataloaders[i]:
-                    out=model(x.to(device))
+                    out,_=model(x.to(device))
                     correct+=(torch.argmax(out, axis=1)==y.to(device)).sum().item()
             if outfile_name is not None:
                 with open(outfile_name, 'a') as outfile:
