@@ -1,6 +1,0 @@
-
-Epoch: 0/5
-Epoch: 1/5
-Epoch: 2/5
-Epoch: 3/5
-Epoch: 4/5

@@ -144,3 +144,5 @@ stderr/
 
 # exmaple images
 examples/
+
+trained_models/

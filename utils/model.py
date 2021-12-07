@@ -10,7 +10,7 @@ def get_model_names():
     Returns a list of all model names
     :return: list of model names
     """
-    return ['resnet18', 'resnet50', 'resnet101', 'vit_base_patch16_224', 'vit_base_patch32_224',
+    return ['resnet18', 'resnet50', 'resnet101', 'resnet152' 'vit_base_patch16_224', 'vit_base_patch32_224',
             'vit_small_patch16_224', 'vit_small_patch32_224']
 
 
@@ -19,7 +19,7 @@ def get_cnn_names():
     Returns a list of all cnn names
     :return: list of cnn names
     """
-    return ['resnet18', 'resnet50', 'resnet101']
+    return ['resnet152']
 
 
 def get_vit_names():
