@@ -19,7 +19,7 @@ dataloaders = get_dataloaders(data_dir=args.data,
                               train_batch_size=args.train_batch_size,
                               test_batch_size=args.test_batch_size)
 # get device
-device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+device = torch.device("cuda:1" if torch.cuda.is_available() else "cpu")
 print("Device:", device)
 
 # generate pretrained models with timm
