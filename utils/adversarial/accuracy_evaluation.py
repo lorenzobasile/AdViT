@@ -2,17 +2,23 @@ import torch
 from deeprobust.image.attack.fgsm import FGSM
 from deeprobust.image.attack.pgd import PGD
 
-from utils.attack import kpixel_attack
+from utils.adversarial.attack import kpixel_attack
 
 
 def evaluate_clean_accuracy(models_dict, dataloaders, device, outfile):
     """
-    Evaluates the accuracy of the clean models on the test set
-    :param models_dict:
-    :param dataloaders:
-    :param device:
-    :param outfile:
-    :return:
+    Evaluates the accuracy of the models on the test set with no adversarial attacks
+
+    Parameters
+    ----------
+    models_dict : dict
+        dictionary of models
+    dataloaders : dict
+        dictionary of dataloaders
+    device : torch.device
+        device to use
+    outfile : str
+        file to write the results to
     """
     correct = torch.zeros(len(models_dict))
 
@@ -32,15 +38,27 @@ def evaluate_clean_accuracy(models_dict, dataloaders, device, outfile):
 def evaluate_adversarial_accuracy(models_dict, dataloaders, device, outfile, epsilons=None,
                                   attack="FGSM", use_k_pixel=False, k=3000):
     """
-    Evaluates the accuracy of the adversarial models on the test set with different epsilons
-    :param models_dict: dictionary of models
-    :param dataloaders: dictionary of dataloaders
-    :param device: device to use
-    :param outfile: file to write the results to
-    :param epsilons: list of epsilons to use
-    :param attack: gradient attack to use (FGSM or PGD)
-    """
+    Evaluates the accuracy of the models on the test set with adversarial attacks
 
+    Parameters
+    ----------
+    models_dict : dict
+        dictionary of models
+    dataloaders : dict
+        dictionary of dataloaders
+    device : torch.device
+        device to use
+    outfile : str
+        file to write the results to
+    epsilons : list
+        list of epsilons to use for the attacks
+    attack : str
+        attack to use (FGSM or PGD)
+    use_k_pixel : bool
+        flag that tells whether to use k-pixel attack or not (only for PGD)
+    k : int
+        number of pixels to perturb (only for k-pixel attack)
+    """
     correct_k=None
 
     if epsilons is None:

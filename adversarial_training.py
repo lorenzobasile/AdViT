@@ -1,6 +1,6 @@
 import argparse
 
-from utils.adversarial_train import ADVtrain
+from utils.adversarial.adversarial_train import ADVtrain
 from utils.data import get_dataloaders
 import torch
 import timm

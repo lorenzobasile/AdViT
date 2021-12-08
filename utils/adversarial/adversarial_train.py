@@ -4,7 +4,35 @@ from deeprobust.image.attack.pgd import PGD
 
 
 def ADVtrain(model, adversarytype, dataloaders, n_epochs, optimizer, eps, scheduler=None, outfile_name=None, clip=False):
+    """
+    Train the model using adversarial training.
 
+    Parameters
+    ----------
+    model : torch.nn.Module
+        The model to be trained.
+    adversarytype : str
+        The type of adversary to be used.
+    dataloaders : dict
+        The dataloaders for the training and test sets.
+    n_epochs : int
+        The number of epochs to train the model.
+    optimizer : torch.optim.Optimizer
+        The optimizer to be used for training.
+    eps : float
+        The epsilon value for the adversarial attack.
+    scheduler : torch.optim.lr_scheduler
+        The learning rate scheduler to be used for training.
+    outfile_name : str
+        The name of the output file.
+    clip : bool
+        Whether to clip the output of the model.
+
+    Returns
+    -------
+    model : torch.nn.Module
+        The trained model.
+    """
     loss=torch.nn.CrossEntropyLoss()
     device=torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
     if outfile_name is not None:
