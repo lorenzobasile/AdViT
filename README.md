@@ -25,3 +25,8 @@ Since not many studies ([3], [4]) have been conducted yet on adversarial attacks
 
 [4] On the Robustness of Vision Transformers to Adversarial Examples, Mahmood et al., 2021
 
+
+### Authors
+
+* Lorenzo Basile, PhD Candidate in Applied Data Science and Artificial Intelligence @ University of Trieste
+* Roberto Corti, Data Scientist @ Orobix srl
