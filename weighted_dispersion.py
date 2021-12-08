@@ -2,7 +2,7 @@ import timm
 import torch
 from deeprobust.image.attack.pgd import PGD
 from utils.data import get_dataloaders
-from utils.attack import kpixel_attack, mean_distance, mean_weighted_distance, mean_std_distance
+from utils.adversarial.attack import kpixel_attack, mean_weighted_distance
 from torchvision import transforms
 
 

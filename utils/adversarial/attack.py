@@ -2,7 +2,23 @@ import torch
 
 
 def kpixel_attack(X, X_pgd, k=3000):
+    """
+    K -pixel attack on the image X perturbed by PGD
 
+    Parameters
+    ----------
+    X : torch.Tensor
+        Image to attack
+    X_pgd : torch.Tensor
+        Perturbed image by PGD
+    k : int
+        Number of pixels to retain from PGD perturbation
+
+    Returns
+    -------
+    X_kp : torch.Tensor
+        Image with k pixels perturbed
+    """
     attack_norm = torch.norm(X_pgd - X, dim=1, p=2)
     B, C, H, W = X.shape
     reshaped_norm = attack_norm.reshape(B, -1)
@@ -17,6 +33,21 @@ def kpixel_attack(X, X_pgd, k=3000):
 
 
 def mean_distance(perturbation, p=2):
+    """
+    Mean distance between the pixels of the perturbation
+
+    Parameters
+    ----------
+    perturbation : torch.Tensor
+        Perturbation
+    p : int
+        Norm to use
+
+    Returns
+    -------
+    mean_distance : float
+        Mean distance between the pixels of the perturbation
+    """
     B, C, H, W = perturbation.shape
     norm = torch.norm(perturbation, dim=1, p=2)
     nz = torch.stack([norm[i].nonzero() for i in range(B)])
@@ -24,6 +55,21 @@ def mean_distance(perturbation, p=2):
     return distances[distances > 0].mean()
 
 def mean_std_distance(perturbation, p=2):
+    """
+    Mean standard deviation distance between the pixels of the perturbation
+
+    Parameters
+    ----------
+    perturbation : torch.Tensor
+        Perturbation
+    p : int
+        Norm to use
+
+    Returns
+    -------
+    mean_std_distance : float
+        Mean standard deviation distance between the pixels of the perturbation
+    """
     B, C, H, W = perturbation.shape
     norm = torch.norm(perturbation, dim=1, p=2)
     nz = torch.stack([norm[i].nonzero() for i in range(B)])
@@ -31,6 +77,21 @@ def mean_std_distance(perturbation, p=2):
     return distances[distances > 0].mean(), distances[distances > 0].std()
 
 def mean_weighted_distance(perturbation, p=2):
+    """
+    Mean weighted distance between the pixels of the perturbation
+
+    Parameters
+    ----------
+    perturbation : torch.Tensor
+        Perturbation
+    p : int
+        Norm to use
+
+    Returns
+    -------
+    mean_weighted_distance : float
+        Mean weighted distance between the pixels of the perturbation
+    """
     B, C, H, W = perturbation.shape
     norm = torch.norm(perturbation, dim=1)
     nz = torch.stack([norm[i].nonzero() for i in range(B)])

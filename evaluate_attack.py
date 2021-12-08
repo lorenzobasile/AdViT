@@ -1,7 +1,7 @@
 import timm
 import torch
 
-from utils.adversarial import evaluate_clean_accuracy, evaluate_adversarial_accuracy
+from utils.adversarial.accuracy_evaluation import evaluate_clean_accuracy, evaluate_adversarial_accuracy
 from utils.data import get_dataloaders
 import argparse
 

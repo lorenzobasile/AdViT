@@ -8,7 +8,10 @@ from torch import nn
 def get_model_names():
     """
     Returns a list of all model names
-    :return: list of model names
+
+    Returns
+    -------
+    list of model names
     """
     return ['resnet18', 'resnet50', 'resnet101', 'resnet152' 'vit_base_patch16_224', 'vit_base_patch32_224',
             'vit_small_patch16_224', 'vit_small_patch32_224']
@@ -16,16 +19,22 @@ def get_model_names():
 
 def get_cnn_names():
     """
-    Returns a list of all cnn names
-    :return: list of cnn names
+    Returns a list of all CNN names
+
+    Returns
+    -------
+    list of CNN names
     """
     return ['resnet152']
 
 
 def get_vit_names():
     """
-    Returns a list of all vit names
-    :return: list of vit names
+    Returns a list of all ViT names
+
+    Returns
+    -------
+    list of ViT names
     """
     return ['vit_base_patch16_224', 'vit_base_patch32_224', 'vit_small_patch16_224', 'vit_small_patch32_224']
 
@@ -33,7 +42,13 @@ def get_vit_names():
 def load_trained_models(models_dict, trained_models_folder='normal_training'):
     """
     Loads trained models (on imagenette) from trained models folder
-    :param models_dict: dictionary of models
+
+    Parameters
+    ----------
+    models_dict: dict
+        Dictionary of models to load
+    trained_models_folder: str
+        Folder where trained models are stored (normal training or adversarial training)
     """
 
     # raise error if trained_models_folder is not the name of a folder inside trained_models
@@ -50,11 +65,21 @@ def load_trained_models(models_dict, trained_models_folder='normal_training'):
 
 def create_ViT(img_size=224, patch_size=16, num_classes=10):
     """
-    Creates a ViT model
-    :param img_size: size of input image
-    :param patch_size: size of patch
-    :param num_classes: number of classes
-    :return: model
+    Creates a ViT/B-16 model, loads pretrained weights from timm and changes the architecture based on img_size, patch_size and num_classes
+
+    Parameters
+    ----------
+    img_size: int
+        Image size
+    patch_size: int
+        Patch size
+    num_classes: int
+        Number of classes
+
+    Returns
+    -------
+    model: nn.Module
+        ViT model
     """
     weights = None
 
