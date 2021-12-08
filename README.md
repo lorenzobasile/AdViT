@@ -2,7 +2,7 @@
 
 ## Adversarial attacks on Vision Transformers (ViTs) and comparison with Convolutional Neural Networks (CNNs)
 
-![](images/plot_adv_cln.png)
+<img src="images/plot_adv_cln.png" alt="drawing" width="500"/>
 
 ## Introduction
 Vision Transformer (ViT) is a newly proposed [1] architecture for Computer Vision that is turning out to be extremely successful in many different tasks, attaining state-of-art performance on major classification benchmarks, previously dominated by CNN models. It is known that CNN classifiers suffer from adversarial attacks [2], i.e. intentionally designed inputs that cause the model to fail.
