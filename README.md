@@ -28,5 +28,6 @@ Since not many studies ([3], [4]) have been conducted yet on adversarial attacks
 
 ### Authors
 
-* Lorenzo Basile, PhD Candidate in Applied Data Science and Artificial Intelligence @ University of Trieste
-* Roberto Corti, Data Scientist @ Orobix srl
+Lorenzo Basile, PhD Candidate in Applied Data Science and Artificial Intelligence @ University of Trieste
+
+Roberto Corti, Data Scientist @ Orobix srl
