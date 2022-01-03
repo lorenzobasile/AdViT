@@ -63,3 +63,10 @@ def extract_neighbourhoods(model, dataloader, k=10):
                     k_dist[h, i*x.shape[0]:(i+1)*x.shape[0]]=multidim_select(extended_dist,indices)
                     k_neighbours[h, i*x.shape[0]:(i+1)*x.shape[0]]=multidim_select(torch.cat([k_neighbours[h,i*x.shape[0]:(i+1)*x.shape[0]], neighbours], axis=1), indices)
     return k_neighbours
+
+def compute_overlap(neighbourhood1, neighbourhood2):
+    N, k=neighbourhood1.shape
+    overlap=0
+    for i in range(len(neighbourhood1)):
+        overlap+=len(np.intersect1d(neighbourhood1[i], neighbourhood2[i]))
+    return overlap/k/N
