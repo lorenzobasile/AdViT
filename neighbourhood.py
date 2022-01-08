@@ -1,3 +1,5 @@
+import pickle
+
 import timm
 import torch
 
@@ -31,4 +33,5 @@ load_trained_models(models, trained_models_folder=args.model_folder)
 
 for model_name, model in models.items():
     print(model_name)
-    extract_neighbourhoods(model, dataloaders['test'])
+    k_neighbours = extract_neighbourhoods(model, dataloaders['train'])
+    torch.save(k_neighbours, f'./neighbourhoods/{model_name}_neighbourhoods.pt')
