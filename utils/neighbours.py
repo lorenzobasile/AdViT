@@ -48,6 +48,7 @@ def extract_neighbourhoods(model, dataloader, k=10):
             print("Batch: ", i)
             _, repr=model(x)
             if i==0:
+                batch_size=x.shape[0]
                 k_dist=torch.ones((len(repr), N, k)).to(device)*np.inf
                 k_neighbours=torch.zeros((len(repr), N, k), dtype=torch.int).to(device)
             for j, (xp, yp) in enumerate(dataloader):
@@ -57,11 +58,11 @@ def extract_neighbourhoods(model, dataloader, k=10):
                 for h in range(len(repr)):
                     distances, neighbours=[a[:,:k] for a in torch.cdist(repr[h].reshape(repr[h].shape[0], -1), reprp[h].reshape(reprp[h].shape[0], -1)).sort(dim=1)]
                     neighbours=neighbours.int()
-                    neighbours+=j*x.shape[0]
-                    extended_dist=torch.cat([k_dist[h,i*x.shape[0]:(i+1)*x.shape[0]], distances], axis=1)
+                    neighbours+=j*batch_size
+                    extended_dist=torch.cat([k_dist[h,i*batch_size:i*batch_size+distances.shape[0]], distances], axis=1)
                     indices=extended_dist.argsort(dim=1)[:,:k]
-                    k_dist[h, i*x.shape[0]:(i+1)*x.shape[0]]=multidim_select(extended_dist,indices)
-                    k_neighbours[h, i*x.shape[0]:(i+1)*x.shape[0]]=multidim_select(torch.cat([k_neighbours[h,i*x.shape[0]:(i+1)*x.shape[0]], neighbours], axis=1), indices)
+                    k_dist[h, i*batch_size:i*batch_size+distances.shape[0]]=multidim_select(extended_dist,indices)
+                    k_neighbours[h, i*batch_size:i*batch_size+distances.shape[0]]=multidim_select(torch.cat([k_neighbours[h,i*batch_size:i*batch_size+distances.shape[0]], neighbours], axis=1), indices)
     return k_neighbours
 
 def compute_overlap(neighbourhood1: torch.Tensor, neighbourhood2: torch.Tensor):
